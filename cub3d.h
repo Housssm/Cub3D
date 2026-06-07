@@ -1,13 +1,14 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <string.h>
-#include <sys/time.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <stdio.h>
+# include <fcntl.h>
+# include <string.h>
+# include <sys/time.h>
+# include "libft.h"
 
-
+# define USAGE "Usage: ./cub3d <file.cub>\n"
 
 #endif
