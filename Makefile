@@ -76,7 +76,7 @@ MLX_FLAGS = -L${MLX_DIR} -lmlx -lXext -lX11 -lm
 all: ${NAME}
 
 ${NAME}: ${OBJS} ${LIBFT} ${PRINTF} ${GNL} ${MLX}
-	@${CC} ${CFLAGS} ${OBJS} ${LIBFT} ${PRINTF} ${GNL} ${MLX_FLAGS} -o ${NAME}
+	@${CC} ${CFLAGS} ${OBJS} ${PRINTF} ${GNL} ${LIBFT} ${MLX_FLAGS} -o ${NAME}
 
 ${LIBFT}:
 	@make -sC ${LIBFT_DIR}
