@@ -88,6 +88,9 @@ void	fill_data(t_data *data, char **av)
 	data->game->w = data->map_width;
 	data->game->h = data->map_height;
 	data->wall = "images/wall.xpm";
+	// data->game->pos_x = data->position_player_x;
+	// data->game->pos_y = data->position_player_y;
+	find_pos(data->game->map, &data->game->pos_x, &data->game->pos_y);
 	// data->game->w =data->map_height;
 	// data->game->h = data->map_width;
 	// data->game-> = data->n_text;
@@ -105,6 +108,81 @@ void	fill_data(t_data *data, char **av)
 	// data->img;
 }
 /*********************************************************************/
+
+size_t	ft_lentab(char **tab)
+{
+	size_t	i;
+
+	i = 0;
+	while (tab[i])
+		i++;
+	return (i);
+}
+
+// void	find_pos(char **tab, int *x, int *y)
+// {
+// 	size_t	i;
+// 	// char	*charset;
+// 	int		j;	
+
+// 	i = 0;
+// 	// charset = "NPWE";
+// 	while (i < ft_lentab(tab))
+// 	{
+// 		j = 0;
+// 		while (tab[i][j])
+// 		{
+// 			if (tab[i][j] == 'N' || tab[i][j] == 'P' || tab[i][j] == 'W' || tab[i][j] == 'E')
+// 			{
+// 					*x = j;
+// 					*y = i;
+// 			}
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// }
+
+int	find_player(char c, char *charset)
+{
+	int i;
+
+	i = 0;
+	while(charset[i])
+	{
+		if (c == charset[i])
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+
+void	find_pos(char **tab, int *x, int *y)
+{
+	size_t	i;
+	int		j;
+	char	*charset;
+
+	i = 0;
+	charset = "NSEWP";
+	while (i < ft_lentab(tab))
+	{
+		j = 0;
+		while (tab[i][j])
+		{
+			if (find_player(tab[i][j], charset))
+			{
+					*x = j;
+					*y = i;
+					return ;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
 int	wind_creation(t_data *data)
 {
 	int	width;
@@ -158,9 +236,9 @@ int	fill_display(t_game *game, size_t i, size_t j)
 
 	if (game->map[i][j] == '1')
 		check = mlx_put_image_to_window(game->mlx, game->win, game->wall, j * BITS_SIZE, i * BITS_SIZE);
-	if (game->map[i][j] == '0')
+	else if (game->map[i][j] == '0')
 		check = mlx_put_image_to_window(game->mlx, game->win, game->floor, j * BITS_SIZE, i * BITS_SIZE);	
-	if (game->map[i][j] == 'P')
+	else if (game->map[i][j] == 'N' || game->map[i][j] == 'S' || game->map[i][j] == 'E' || game->map[i][j] == 'W' || game->map[i][j] == 'P')
 		check = mlx_put_image_to_window(game->mlx, game->win, game->player, j * BITS_SIZE, i * BITS_SIZE);
 	else if (check == 0)
 		return (1);
@@ -193,7 +271,6 @@ int	key_pressed(int touch,t_data *data)
 	int	win;
 
 	win = 0;
-	count = 0;
 	if (touch == ESC)
 		close_wind(data);
 	else if (touch == RIGHT)
@@ -244,7 +321,13 @@ int main(int ac, char **av)
 {
 	t_data	data;
 	t_game	game;
-	
+
+	game.mlx = NULL;
+	game.win = NULL;
+	game.map = NULL;
+	game.wall = NULL;
+	game.floor = NULL;
+	game.player = NULL;
 	data.game = &game;
 	(void)ac;
 	fill_data(&data, av);

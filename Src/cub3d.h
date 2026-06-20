@@ -103,6 +103,9 @@ typedef struct s_data
 }   t_data;
 
 
+void	find_pos(char **tab, int *x, int *y);
+
+
 //cleaning
 
 int close_wind(t_data *data);

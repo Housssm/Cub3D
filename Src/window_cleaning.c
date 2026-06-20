@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/17 19:44:35 by hoel-har          #+#    #+#             */
-/*   Updated: 2026/06/19 20:42:49 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/06/20 17:32:47 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,9 @@ int	delete_all_image(t_data *data)
 		mlx_destroy_image(data->game->mlx, data->game->wall);
 	if (data->game->floor)
 		mlx_destroy_image(data->game->mlx, data->game->floor);
+	if (data->game->player)
+		mlx_destroy_image(data->game->mlx, data->game->player);
+
 	return (0);
 }
 
