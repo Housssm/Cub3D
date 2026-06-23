@@ -7,6 +7,7 @@
 # include <fcntl.h>
 # include <string.h>
 # include <sys/time.h>
+# include <math.h>
 # include "../Libft/libft/libft.h"
 # include "../Libft/GNL/get_next_line.h"
 # include "../minilibx-linux/mlx.h"
@@ -33,6 +34,7 @@
 # define LEFT 97
 # define UP 119
 # define DOWN 115
+# define PI 3.1415926535
 
 // typedef struct s_data
 // {
@@ -49,7 +51,15 @@
 
 // 	t_screen	*screen;
 // }	t_data;
+// typedef struct s_player
+// {
+// 	float	px;
+// 	float	py;
+// 	float	pdx;
+// 	float	pdy;
+// 	float	pa;
 
+// }	t_player;
 
 typedef struct s_game
 {
@@ -57,26 +67,28 @@ typedef struct s_game
 	void	*win;
 	void	*img;
 	void	*wall;
-
-	// void	*colectible;
 	int		pos_x;
 	int		pos_y;
 	int		pos_ex_x;
 	int		pos_ex_y;
 	int		tile_size;
 	void	*player;
-
-	// void	*exit;
 	void	*floor;
-	// void	*danger;
 	int		w;
 	int		h;
 	int		nb_mouv;
+	char 	**map;
+
+	/*Dessiner la ligne pour raycasting*/
+	int		line_lenght;
+	int		endian;
+	int		bits_per_piwel;
+
 	// char    *north_texture;
     // char    *south_texture;
     // char    *east_texture;
     // char    *west_texture;
-	char 	**map;
+	// t_player	*player;
 }	t_game;
 
 typedef struct s_data
@@ -112,8 +124,13 @@ int close_wind(t_data *data);
 void	free_tab(char **tab);
 int	delete_all_image(t_data *data);
 
-//window
+//window creation
 int	display(t_data *data);
+int	wind_creation(t_data *data);
+
+// raycast
+
+void draw_line(t_game *game, int beginX, int beginY, int endX, int endY, int color);
 
 
 #endif

@@ -1,5 +1,5 @@
 
-#include "cub3d.h"
+#include "../Include/cub3d.h"
 
 
 void	remove_newline(char **tab)
@@ -97,9 +97,11 @@ void	fill_data(t_data *data, char **av)
 	// data->game-> = data->s_text;
 	// data->game-> = data->w_text;
 	// data->game-> = data->e_text;
+	
 	data->floor = "images/floor.xpm";
 	data->playa = "images/perso.xpm";
-	// data->game-> = data->c_color;
+	// data->game->ceiling = data->c_color;
+	// data->game->floor = data->c_color;
 	
 	// data->game->map = data->map;
 
@@ -107,7 +109,6 @@ void	fill_data(t_data *data, char **av)
 	// data->win;
 	// data->img;
 }
-/*********************************************************************/
 
 size_t	ft_lentab(char **tab)
 {
@@ -118,30 +119,6 @@ size_t	ft_lentab(char **tab)
 		i++;
 	return (i);
 }
-
-// void	find_pos(char **tab, int *x, int *y)
-// {
-// 	size_t	i;
-// 	// char	*charset;
-// 	int		j;	
-
-// 	i = 0;
-// 	// charset = "NPWE";
-// 	while (i < ft_lentab(tab))
-// 	{
-// 		j = 0;
-// 		while (tab[i][j])
-// 		{
-// 			if (tab[i][j] == 'N' || tab[i][j] == 'P' || tab[i][j] == 'W' || tab[i][j] == 'E')
-// 			{
-// 					*x = j;
-// 					*y = i;
-// 			}
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
 
 int	find_player(char c, char *charset)
 {
@@ -182,69 +159,106 @@ void	find_pos(char **tab, int *x, int *y)
 		i++;
 	}
 }
+/*********************************************************************/
 
-int	wind_creation(t_data *data)
+// int draw_line(t_game *game, int beginX, int beginY, int endX, int endY, int color)
+// {
+// 	int	x;
+// 	int	y;
+
+// 	y = 0;
+// 	while (game->map[y])
+// 	{
+// 		x = 0;
+// 		while (game->map[y][x])
+// 		{			
+// 			if (x >= beginX && x <= endX)
+// 				mlx_pixel_put(game->mlx, game->win, 50, 50, color);
+// 			if (y >= beginY && y <= endY)
+// 				mlx_pixel_put(game->mlx, game->win, 50, 50, color);
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+
+// 	return (0);
+// }
+
+
+void diaw_line(t_game *game, int x0, int y0, int x1, int y1, int color)
 {
-	int	width;
-	int	height;
-
-	width = data->game->w * BITS_SIZE;
-	height = data->game->h* BITS_SIZE;
-	data->game->mlx = mlx_init();
-	if (!data->game->mlx)
-	{
-		ft_putstr_fd("ERROR:Mlx init failed\n", 2);
-		exit(1);
-	}
-	data->game->win = mlx_new_window(data->game->mlx, width, height, WIND_NAME);
-	if (!data->game->win)
-	{
-		mlx_destroy_display(data->game->mlx);
-		free(data->game->mlx);
-		return (1);
-	}
-	return (0);
+    int dx = abs(x1 - x0);
+    int dy = abs(y1 - y0);
+    int sx = (x0 < x1) ? 1 : -1;
+    int sy = (y0 < y1) ? 1 : -1;
+    int err = dx - dy;
+    int e2;
+    
+    while (1)
+    {
+        // Dessiner un pixel
+        mlx_pixel_put(game->mlx, game->win, x0, y0, color);
+        
+        // Condition d'arrêt
+        if (x0 == x1 && y0 == y1)
+            break;
+        
+        // Calcul de l'erreur
+        e2 = 2 * err;
+        
+        if (e2 > -dy)
+        {
+            err -= dy;
+            x0 += sx;
+        }
+        if (e2 < dx)
+        {
+            err += dx;
+            y0 += sy;
+        }
+    }
 }
 
-int	file_to_img(t_data	*data)
+void draw_line(t_game *game, int beginX, int beginY, int endX, int endY, int color)
 {
+	int	dx;
+	int	dy;
+	int	sx;
+	int	sy;
+	int err;
+	int e2;
 
-	data->game->wall = mlx_xpm_file_to_image(data->game->mlx, data->wall, &data->game->w, &data->game->h);
-	data->game->floor = mlx_xpm_file_to_image(data->game->mlx, data->floor, &data->game->w, &data->game->h);
-	data->game->player = mlx_xpm_file_to_image(data->game->mlx, data->playa, &data->game->w, &data->game->h);
-	
-	// data->game->north_texture = mlx_xpm_file_to_image(data->game->mlx, data->game->north_texture, &data->map_width, &data->map_height);
-	// data->game->south_texture = mlx_xpm_file_to_image(data->game->mlx, data->game->south_texture, &data->map_width, &data->map_height);
-	// data->game->east_texture = mlx_xpm_file_to_image(data->game->mlx, data->game->east_texture, &data->map_width, &data->map_height);
-	// data->game->west_texture = mlx_xpm_file_to_image(data->game->mlx, data->game->west_texture, &data->map_width, &data->map_height);
-
-	if (!data->game->wall || !data->game->floor || !data->game->player)
+	dx = abs(endX - beginX);
+	dy = abs(endY - beginY);
+	err = dx - dy;
+	if (beginX < endX)
+		sx = 1;
+	else
+		sx = -1;
+	if (beginY < endY)
+		sy = 1;
+	else
+		sy = -1;
+	while(1)
 	{
-		ft_putstr_fd("Error: Image loading failed\n", 2);
-		return (1);
+		mlx_pixel_put(game->mlx, game->win, beginX, beginY, color);
+		if (beginX == endX && beginY == endY)
+			break;
+		e2 = 2 * err;
+		if (e2 > -dy)
+		{
+			err -= dy;
+			beginX += sx;
+		}
+		if (e2 < dx)
+		{
+			err += dx;
+			beginY += sy;
+		}
 	}
-
-	return (0);
 }
 
 
-int	fill_display(t_game *game, size_t i, size_t j)
-{
-	int	check;
-
-	check = 0;
-
-	if (game->map[i][j] == '1')
-		check = mlx_put_image_to_window(game->mlx, game->win, game->wall, j * BITS_SIZE, i * BITS_SIZE);
-	else if (game->map[i][j] == '0')
-		check = mlx_put_image_to_window(game->mlx, game->win, game->floor, j * BITS_SIZE, i * BITS_SIZE);	
-	else if (game->map[i][j] == 'N' || game->map[i][j] == 'S' || game->map[i][j] == 'E' || game->map[i][j] == 'W' || game->map[i][j] == 'P')
-		check = mlx_put_image_to_window(game->mlx, game->win, game->player, j * BITS_SIZE, i * BITS_SIZE);
-	else if (check == 0)
-		return (1);
-
-	return (0);
-}
 
 int	player_mouvement(t_data *data, int x, int y)
 {
@@ -292,35 +306,11 @@ int	key_pressed(int touch,t_data *data)
 	return (0);
 }
 
-int	display(t_data *data)
-{
-	size_t	i;
-	size_t	j;
-	
-	i = 0;
-	if (file_to_img(data))
-		return (close_wind(data), 1);
-	while (data->game->map[i])
-	{
-		j = 0;
-		while (data->game->map[i][j])
-		{			
-			if (fill_display(data->game, i, j))
-				return (close_wind(data), 1);
-			j++;
-		}
-		i++;
-	}
-	// display_mouv(data);
-	return (0);
-}
-
-
-
 int main(int ac, char **av)
 {
 	t_data	data;
 	t_game	game;
+	// t_player	player;
 
 	game.mlx = NULL;
 	game.win = NULL;
@@ -329,6 +319,7 @@ int main(int ac, char **av)
 	game.floor = NULL;
 	game.player = NULL;
 	data.game = &game;
+	// game.player = &player;
 	(void)ac;
 	fill_data(&data, av);
 	
