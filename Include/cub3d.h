@@ -19,14 +19,6 @@
 # define BITS_SIZE 32
 # define DIM_X 750
 # define DIM_Y 400
-// # define IMG_WALL "Images/wall_bank.xpm"
-// # define IMG_FLOOR "Images/floor_bank.xpm"
-// # define IMG_COLL "Images/money.xpm"
-// # define IMG_PLAYER "Images/Robber_beg.xpm"
-// # define IMG_PLAYER2 "Images/Robber_med.xpm"
-// # define IMG_PLAYER3 "Images/Robber_end.xpm"
-// # define IMG_EXIT "Images/exit.xpm"
-// # define IMG_DANG "Images/police.xpm"
 // # define MAX_WIDTH 1280
 // # define MAX_HEIGHT 720
 # define ESC 65307
@@ -35,6 +27,7 @@
 # define UP 119
 # define DOWN 115
 # define PI 3.1415926535
+#define FOV 60 // filed of vue
 
 // typedef struct s_data
 // {
@@ -67,10 +60,13 @@ typedef struct s_game
 	void	*win;
 	void	*img;
 	void	*wall;
-	int		pos_x;
-	int		pos_y;
-	int		pos_ex_x;
-	int		pos_ex_y;
+
+	double	pos_x;
+	double	pos_y;
+	double	pos_dx;
+	double	pos_dy;
+	double	pa;
+
 	int		tile_size;
 	void	*player;
 	void	*floor;
@@ -115,7 +111,7 @@ typedef struct s_data
 }   t_data;
 
 
-void	find_pos(char **tab, int *x, int *y);
+void	find_pos(char **tab, double *x, double *y, double *direction);
 
 
 //cleaning

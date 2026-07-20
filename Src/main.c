@@ -90,7 +90,9 @@ void	fill_data(t_data *data, char **av)
 	data->wall = "images/wall.xpm";
 	// data->game->pos_x = data->position_player_x;
 	// data->game->pos_y = data->position_player_y;
-	find_pos(data->game->map, &data->game->pos_x, &data->game->pos_y);
+	find_pos(data->game->map, &data->game->pos_x, &data->game->pos_y, &data->game->pa);
+	data->game->pos_dx = cos(data->game->pa) * 5;
+	data->game->pos_dy = sin(data->game->pa) * 5;
 	// data->game->w =data->map_height;
 	// data->game->h = data->map_width;
 	// data->game-> = data->n_text;
@@ -134,15 +136,28 @@ int	find_player(char c, char *charset)
 	return (0);
 }
 
+int init_direction(char c)
+{
+	if (c == 'N')
+		return (3 * PI/ 2);
+	else if (c == 'S')
+		return (PI / 2);
+	else if (c == 'E')
+		return (0);
+	else if (c == 'W')
+		return (PI);
+	else
+		return (0);
+}
 
-void	find_pos(char **tab, int *x, int *y)
+void	find_pos(char **tab, double *x, double *y, double *direction)
 {
 	size_t	i;
 	int		j;
 	char	*charset;
 
 	i = 0;
-	charset = "NSEWP";
+	charset = "NSEW";
 	while (i < ft_lentab(tab))
 	{
 		j = 0;
@@ -152,6 +167,7 @@ void	find_pos(char **tab, int *x, int *y)
 			{
 					*x = j;
 					*y = i;
+					*direction = init_direction(tab[i][j]);
 					return ;
 			}
 			j++;
@@ -161,140 +177,85 @@ void	find_pos(char **tab, int *x, int *y)
 }
 /*********************************************************************/
 
-// int draw_line(t_game *game, int beginX, int beginY, int endX, int endY, int color)
+
+// void draw_line(t_game *game, int beginX, int beginY, int endX, int endY, int color)
 // {
-// 	int	x;
-// 	int	y;
+// 	double	dx;
+// 	double	dy;
+// 	double	sx;
+// 	double	sy;
+// 	double err;
+// 	double e2;
 
-// 	y = 0;
-// 	while (game->map[y])
+// 	dx = abs(endX - beginX);
+// 	dy = abs(endY - beginY);
+// 	err = dx - dy;
+// 	if (beginX < endX)
+// 		sx = 1;
+// 	else
+// 		sx = -1;
+// 	if (beginY < endY)
+// 		sy = 1;
+// 	else
+// 		sy = -1;
+// 	while(1)
 // 	{
-// 		x = 0;
-// 		while (game->map[y][x])
-// 		{			
-// 			if (x >= beginX && x <= endX)
-// 				mlx_pixel_put(game->mlx, game->win, 50, 50, color);
-// 			if (y >= beginY && y <= endY)
-// 				mlx_pixel_put(game->mlx, game->win, 50, 50, color);
-// 			x++;
+// 		mlx_pixel_put(game->mlx, game->win, beginX, beginY, color);
+// 		if (beginX == endX && beginY == endY)
+// 			break;
+// 		e2 = 2 * err;
+// 		if (e2 > -dy)
+// 		{
+// 			err -= dy;
+// 			beginX += sx;
 // 		}
-// 		y++;
+// 		if (e2 < dx)
+// 		{
+// 			err += dx;
+// 			beginY += sy;
+// 		}
 // 	}
-
-// 	return (0);
 // }
-
-
-void diaw_line(t_game *game, int x0, int y0, int x1, int y1, int color)
-{
-    int dx = abs(x1 - x0);
-    int dy = abs(y1 - y0);
-    int sx = (x0 < x1) ? 1 : -1;
-    int sy = (y0 < y1) ? 1 : -1;
-    int err = dx - dy;
-    int e2;
-    
-    while (1)
-    {
-        // Dessiner un pixel
-        mlx_pixel_put(game->mlx, game->win, x0, y0, color);
-        
-        // Condition d'arrêt
-        if (x0 == x1 && y0 == y1)
-            break;
-        
-        // Calcul de l'erreur
-        e2 = 2 * err;
-        
-        if (e2 > -dy)
-        {
-            err -= dy;
-            x0 += sx;
-        }
-        if (e2 < dx)
-        {
-            err += dx;
-            y0 += sy;
-        }
-    }
-}
-
-void draw_line(t_game *game, int beginX, int beginY, int endX, int endY, int color)
-{
-	int	dx;
-	int	dy;
-	int	sx;
-	int	sy;
-	int err;
-	int e2;
-
-	dx = abs(endX - beginX);
-	dy = abs(endY - beginY);
-	err = dx - dy;
-	if (beginX < endX)
-		sx = 1;
-	else
-		sx = -1;
-	if (beginY < endY)
-		sy = 1;
-	else
-		sy = -1;
-	while(1)
-	{
-		mlx_pixel_put(game->mlx, game->win, beginX, beginY, color);
-		if (beginX == endX && beginY == endY)
-			break;
-		e2 = 2 * err;
-		if (e2 > -dy)
-		{
-			err -= dy;
-			beginX += sx;
-		}
-		if (e2 < dx)
-		{
-			err += dx;
-			beginY += sy;
-		}
-	}
-}
-
-
-
-int	player_mouvement(t_data *data, int x, int y)
-{
-	int	pos_x;
-	int	pos_y;
-
-	pos_x = data->game->pos_x;
-	pos_y = data->game->pos_y;
-	if (data->game->map[pos_y + y][pos_x + x] != '1')
-	{
-
-		data->game->map[pos_y + y][pos_x + x] = 'P';
-		data->game->map[pos_y][pos_x] = '0';
-		data->game->pos_x += x;
-		data->game->pos_y += y;
-	}
-	delete_all_image(data);
-	display(data);
-	return (0);
-}
 
 int	key_pressed(int touch,t_data *data)
 {
-	int	win;
+	double	win;
+	// t_game	*game;
 
+	// game = &data->game;
 	win = 0;
 	if (touch == ESC)
 		close_wind(data);
-	else if (touch == RIGHT)
-		win = player_mouvement(data, 1, 0);
 	else if (touch == LEFT)
-		win = player_mouvement(data, -1, 0);
+	{
+		printf("LEFT");
+		data->game->pa -= 0.1;
+		if (data->game->pa < 0)
+			data->game->pa += 2 * PI;
+		data->game->pos_dx = cos(data->game->pa) * 5;
+		data->game->pos_dy = sin(data->game->pa) * 5;
+	}
+	else if (touch == RIGHT)
+	{
+		printf("RIGHT");
+		data->game->pa += 0.1;
+		if (data->game->pa > 2 * PI)
+			data->game->pa -= 2 * PI;
+		data->game->pos_dx = cos(data->game->pa) * 5;
+		data->game->pos_dy = sin(data->game->pa) * 5;
+	}
 	else if (touch == UP)
-		win = player_mouvement(data, 0, -1);
+	{
+		printf("UP");
+		data->game->pos_x += data->game->pos_dx;
+		data->game->pos_y += data->game->pos_dy;
+	}
 	else if (touch == DOWN)
-		win = player_mouvement(data, 0, 1);
+	{
+		printf("DOWN");
+		data->game->pos_x -= data->game->pos_dx;
+		data->game->pos_y -= data->game->pos_dy;
+	}
 	if (win == 1 || win == 404)
 	{
 		if (win == 1)
@@ -303,6 +264,8 @@ int	key_pressed(int touch,t_data *data)
 			ft_putstr_fd("You've been caught.", 1);
 		close_wind(data);
 	}
+	delete_all_image(data);
+	display(data);
 	return (0);
 }
 

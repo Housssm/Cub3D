@@ -64,16 +64,14 @@ int	fill_display(t_game *game, size_t i, size_t j)
 	return (0);
 }
 
-
-
 int display(t_data *data)
 {
     size_t 	i;
     size_t 	j;
-	int 	start_x;
-	int 	start_y;
-	int 	end_x;
-	int 	end_y;
+	// int 	start_x;
+	// int 	start_y;
+	// int 	end_x;
+	// int 	end_y;
 
     i = 0;
     if (file_to_img(data))
@@ -89,10 +87,33 @@ int display(t_data *data)
         }
         i++;
     }
-    start_x = data->game->pos_x * BITS_SIZE + BITS_SIZE / 2;
-    start_y = data->game->pos_y * BITS_SIZE + BITS_SIZE / 2;
-    end_x = start_x + 5 * BITS_SIZE;
-    end_y = start_y;
-    draw_line(data->game, start_x, start_y, end_x, end_y, 0xFFFFFF);
+    // start_x = data->game->pos_x * BITS_SIZE + BITS_SIZE / 2;
+    // start_y = data->game->pos_y * BITS_SIZE + BITS_SIZE / 2;
+    // end_x = start_x + 5 * BITS_SIZE;
+    // end_y = start_y;
+    // draw_line(data->game, start_x, start_y, end_x, end_y, 0xFFFFFF);
     return (0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
