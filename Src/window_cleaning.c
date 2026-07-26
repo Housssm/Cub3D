@@ -8,9 +8,11 @@ int	delete_all_image(t_data *data)
 		mlx_destroy_image(data->game->mlx, data->game->wall);
 	if (data->game->floor)
 		mlx_destroy_image(data->game->mlx, data->game->floor);
-	if (data->game->player)
-		mlx_destroy_image(data->game->mlx, data->game->player);
-
+	if (data->game->player_img)
+		mlx_destroy_image(data->game->mlx, data->game->player_img);
+	data->game->wall = NULL;
+    data->game->floor = NULL;
+    data->game->player_img = NULL;
 	return (0);
 }
 
