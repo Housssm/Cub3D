@@ -20,12 +20,15 @@
 # define BITS_SIZE 64
 # define MAX_WIDTH 1920
 # define MAX_HEIGHT 1080
+# define BLOCK  64
 # define ESC 65307
 # define RIGHT 100
 # define LEFT 97
 # define UP 119
 # define DOWN 115
-// # define PI 3.1415926535
+# define ARR_RIGHT 65363
+# define ARR_LEFT 65361
+# define PI 3.1415926535
 // # define FOV 60 // filed of vue
 
 typedef struct s_game t_game;
@@ -35,10 +38,13 @@ typedef struct s_player
 {
 	float	pos_x;
 	float	pos_y;
+	float	angle;
 	bool	key_up;
 	bool	key_down;
 	bool	key_left;
 	bool	key_right;
+	bool	right_rotation;
+	bool	left_rotation;
 	
 	t_game	*game;
 }	t_player;

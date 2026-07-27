@@ -620,10 +620,13 @@ int	game_initiation(t_game *game, char **av)
 
 void	player_initialisation(t_player *player)
 {
+	player->angle = PI / 2;
 	player->key_up = false;
 	player->key_down = false;
 	player->key_right = false;
 	player->key_left = false;
+	player->left_rotation = false;
+	player->right_rotation = false;
 }
 
 void	released_key(int keycode, t_game *game)
@@ -639,6 +642,11 @@ void	released_key(int keycode, t_game *game)
 		player->key_right = false;
 	if (keycode == LEFT)
 		player->key_left = false;
+	if (keycode == ARR_LEFT)
+		player->left_rotation = false;
+	if (keycode == ARR_RIGHT)
+		player->right_rotation = false;
+
 }
 
 void	pressed_key(int keycode, t_game *game)
@@ -668,21 +676,60 @@ void	pressed_key(int keycode, t_game *game)
 		player->key_left = true;
 		player->key_right = false;
 	}
+	if (keycode == ARR_LEFT)
+	{
+			player->left_rotation = true;
+			player->right_rotation = false;
+	}
+		if (keycode == ARR_RIGHT)
+	{
+			player->right_rotation = true;
+			player->left_rotation = false;
+	}
 }
 
 void	player_mouvement(t_player *player)
 {
-	int	speed;
+	int		speed;
+	float	speed_angle;
+	float	cos_angle;
+	float	sin_angle;
 
-	speed = 20;
-	if (player->key_up)
-		player->pos_y -= speed;
-	if (player->key_down)
-		player->pos_y += speed;
-	if (player->key_right)
-		player->pos_x += speed;
-	if (player->key_left)
-		player->pos_x -= speed;
+	speed = 10;
+	speed_angle = 0.03;
+	cos_angle = cos(player->angle);
+	sin_angle = sin(player->angle);
+
+	if (player->left_rotation)
+		player->angle -= speed_angle;
+	if (player->right_rotation)
+		player->angle += speed_angle;
+	if (player->angle > 2 * PI)
+		player->angle = 0;
+	if (player->angle < 0)
+		player->angle = 2 * PI;
+
+
+    if (player->key_down)
+    {
+        player->pos_x += cos_angle * speed;
+        player->pos_y += sin_angle * speed;
+    }
+    if (player->key_up)
+    {
+        player->pos_x -= cos_angle * speed;
+        player->pos_y -= sin_angle * speed;
+    }
+    if (player->key_right)
+    {
+        player->pos_x += sin_angle * speed;
+        player->pos_y -= cos_angle * speed;
+    }
+    if (player->key_left)
+    {
+        player->pos_x -= sin_angle * speed;
+        player->pos_y += cos_angle * speed;
+    }
 }
 
 
@@ -729,7 +776,7 @@ void	draw_map(t_game *game)
 		while(game->map[i][j])
 		{
 			if (game->map[i][j] == '1')
-				draw_player(j * 64, i * 64, 64, color, game);
+				draw_player(j * BLOCK, i * BLOCK, BLOCK, color, game);
 			j++;
 		}
 		i++;
