@@ -29,6 +29,10 @@
 # define ARR_RIGHT 65363
 # define ARR_LEFT 65361
 # define PI 3.1415926535
+# define NORTH 0.0
+# define SOUTH PI
+# define EAST (PI /2)
+# define WEST (3 * PI / 2)
 
 typedef struct s_game t_game;
 

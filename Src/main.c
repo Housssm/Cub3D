@@ -94,6 +94,20 @@ char	**extract_map(char **av, t_game *game)
 	return (tab);
 }
 
+void	init_direction(t_player *player, char c)
+{
+	if (c == 'N')
+		player->angle = NORTH;
+	if (c == 'S')
+		player->angle = SOUTH;
+	if (c == 'E')
+		player->angle = EAST;
+	if (c == 'W')
+		player->angle = WEST;
+}
+
+
+
 int	find_pos(t_game *game)
 {
 	size_t	i;
@@ -111,7 +125,7 @@ int	find_pos(t_game *game)
 			{
 				game->player.pos_x = j * 64 + 32;
 				game->player.pos_y = i * 64 + 32;
-				// direction = init_direction(tab[i][j]);
+				init_direction(&game->player, game->map[i][j]);
 				game->map[i][j] = '0';
 				return (0);
 			}
@@ -145,24 +159,6 @@ int	close_wind(t_game *game)
 	return (0);
 }
 
-void	clear_image(t_game *game)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < MAX_HEIGHT)
-	{
-		j = 0;
-		while (j < MAX_WIDTH)
-		{
-			put_pixel(j, i, 0, game);
-			j++;
-		}
-		i++;
-	}
-}
-
 int	fill_data(t_game *game, char **av)
 {
 	game->player.game = game;
@@ -187,7 +183,6 @@ int	fill_data(t_game *game, char **av)
 int	game_initiation(t_game *game, char **av)
 {
 	fill_data(game, av);
-
 	game->mlx = mlx_init();
 	if (!game->mlx)
 	{
@@ -259,19 +254,15 @@ void	pressed_key(int keycode, t_game *game)
 
 int is_wall(t_game *game, float x, float y)
 {
-    int map_x;
-    int map_y;
+	int map_x;
+	int map_y;
 
-    map_x = (int)(x / BLOCK);
-    map_y = (int)(y / BLOCK);
-    
-    // Vérifie les limites de la map
-    if (map_x < 0 || map_x >= game->map_width || map_y < 0 || map_y >= game->map_height)
-        return (1);
-    
-    return (game->map[map_y][map_x] == '1');
+	map_x = (int)(x / BLOCK);
+	map_y = (int)(y / BLOCK);	
+	if (map_x < 0 || map_x >= game->map_width || map_y < 0 || map_y >= game->map_height)
+		return (1);
+	return (game->map[map_y][map_x] == '1');
 }
-
 
 void	player_rotation(t_player *player, float speed_angle)
 {
@@ -284,9 +275,6 @@ void	player_rotation(t_player *player, float speed_angle)
 	if (player->angle < 0)
 		player->angle = 2 * PI;
 }
-
-
-
 
 void player_translation(t_player *player, t_game *game, float cos_angle, float sin_angle)
 {
@@ -341,12 +329,10 @@ void player_translation(t_player *player, t_game *game, float cos_angle, float s
 
 void	player_mouvement(t_player *player)
 {
-	// int		speed;
 	float	speed_angle;
 	float	cos_angle;
 	float	sin_angle;
 
-	// speed = 2;
 	speed_angle = 0.03;
 	cos_angle = cos(player->angle);
 	sin_angle = sin(player->angle);
