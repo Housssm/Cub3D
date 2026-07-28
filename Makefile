@@ -1,8 +1,9 @@
 
 SRCS = \
-		Src/main.c
-# 		Src/window_cleaning.c\
-# 		Src/window_creation.c
+		Src/main.c\
+		Src/window_cleaning.c\
+		Src/minimap_bonus.c\
+		Src/window_creation.c
 
 OBJS = ${SRCS:.c=.o}
 

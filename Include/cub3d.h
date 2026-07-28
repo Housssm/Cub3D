@@ -29,7 +29,6 @@
 # define ARR_RIGHT 65363
 # define ARR_LEFT 65361
 # define PI 3.1415926535
-// # define FOV 60 // filed of vue
 
 typedef struct s_game t_game;
 
@@ -49,6 +48,13 @@ typedef struct s_player
 	t_game	*game;
 }	t_player;
 
+typedef struct s_minimap
+{
+	int	offset_x;
+	int	offset_y;
+	int	block_size;
+} t_minimap;
+
 typedef struct s_game
 {
 	void	*mlx;
@@ -60,24 +66,12 @@ typedef struct s_game
 	int		size_line;
 	int		endian;
 
-
-	// char	*addr;
-	// void	*wall;
-	// void	*floor;
-	// void	*player_img;
-	// int		w;
-	// int		h;
 	int		map_height;
 	int		map_width;
 
-	// /*Dessiner la ligne pour raycasting*/
-	// int		line_length;
-	// int		bits_per_pixel;
-
-
 	t_player	player;
+	t_minimap	minimap;
 }	t_game;
-
 
 void	player_initialisation(t_player *player);
 void put_pixel(int x, int y, int color, t_game *game);
@@ -85,28 +79,10 @@ void put_pixel(int x, int y, int color, t_game *game);
 int	file_to_img(t_game *game);
 
 
-// typedef struct s_data
-// {
-// 	char 	*wall; //tempo
-// 	char 	*playa; //tempo
-// 	char 	*floor; //tempo
+//BONUS
 
-//     char    **map;
-//     char    *north_texture;
-//     char    *south_texture;
-//     char    *east_texture;
-//     char    *west_texture;
-//     char    *char_map;
-//     int     map_height;
-//     int     map_width;
-//     int     floor_color;
-//     int     ceilling_color;
-//     int     position_player_x;
-//     int     position_player_y;
-//     int     map_position;
-// 	t_game	*game;
-// 	t_player *player;
-// }   t_data;
+void	minimap(t_game *game);
+
 
 
 #endif
