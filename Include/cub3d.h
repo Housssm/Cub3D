@@ -109,5 +109,4 @@ int	file_to_img(t_game *game);
 // }   t_data;
 
 
-
 #endif

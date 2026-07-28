@@ -1,6 +1,7 @@
 
 #include "../Include/cub3d.h"
 
+
 // /********************************************************************* */
 // /********************************************************************* */
 // /*******************************CLEANING****************************** */
@@ -182,34 +183,6 @@ int	find_pos(t_game *game)
 }
 // /************************KEEP*********************/
 
-// int	fill_data(t_game *game,char **av)
-// {
-// 	game->map = extract_map(av, game);
-// 	if (!game->map)
-// 		return (1);
-// 	game->wall = "images/wall.xpm";
-// 	game->floor = "images/floor.xpm";
-// 	game->player_img = "images/perso.xpm";
-
-// 	game->map_width = ft_strlen(game->map[0]);
-// 	game->w = game->map_width;
-// 	game->h = game->map_height;
-
-// 	memset(&game->player, 0, sizeof(t_player));
-	
-// 	if (find_pos(game->map, &game->player.pos_x, &game->player.pos_y) != 0)
-// 		return (1);
-
-// 	game->player.key_up = false;
-// 	game->player.key_down = false;
-// 	game->player.key_left = false;
-// 	game->player.key_right = false;
-
-// 	if (file_to_img(game))
-// 		return (1);
-
-// 	return (0);
-// }
 
 
 
@@ -324,203 +297,6 @@ int	find_pos(t_game *game)
 
 
 
-// // void	move_player(t_game *game)
-// // {
-// // 	float	speed;
-// // 	float	new_x;
-// // 	float	new_y;
-// // 	int		map_x;
-// // 	int		map_y;
-// // 	int		old_x;
-// // 	int		old_y;
-
-// // 	speed = 1;
-// // 	new_x = game->player.pos_x;
-// // 	new_y = game->player.pos_y;
-	
-// // 	// Sauvegarder l'ancienne position
-// // 	old_x = (int)game->player.pos_x;
-// // 	old_y = (int)game->player.pos_y;
-	
-// // 	if (game->player.key_up)
-// // 		new_y -= speed;
-// // 	if (game->player.key_down)
-// // 		new_y += speed;
-// // 	if (game->player.key_left)
-// // 		new_x -= speed;
-// // 	if (game->player.key_right)
-// // 		new_x += speed;
-	
-// // 	// Vérifier les collisions
-// // 	map_x = (int)new_x;
-// // 	map_y = (int)new_y;
-	
-// // 	if (map_y >= 0 && map_y < game->map_height && 
-// // 		map_x >= 0 && map_x < game->map_width)
-// // 	{
-// // 		if (game->map[map_y][map_x] != '1')
-// // 		{
-// // 			// Effacer l'ancienne position du joueur dans la map
-// // 			// if (game->map[old_y][old_x] == 'P')
-// // 			// 	game->map[old_y][old_x] = '0';
-			
-// // 			// Mettre à jour la position
-// // 			game->player.pos_x = new_x;
-// // 			game->player.pos_y = new_y;
-			
-// // 			// // Placer le joueur à la nouvelle position
-// // 			// game->map[map_y][map_x] = 'P';
-			
-// // 			// // Redessiner
-// // 			// display(game);
-// // 		}
-// // 	}
-// // }
-
-
-// void	move_player(t_game *game)
-// {
-// 	float speed = 0.1; // Réduire la vitesse pour plus de fluidité
-// 	float new_x = game->player.pos_x;
-// 	float new_y = game->player.pos_y;
-// 	int map_x, map_y;
-	
-// 	// Calculer la nouvelle position
-// 	if (game->player.key_up)
-// 		new_y -= speed;
-// 	if (game->player.key_down)
-// 		new_y += speed;
-// 	if (game->player.key_left)
-// 		new_x -= speed;
-// 	if (game->player.key_right)
-// 		new_x += speed;
-	
-// 	// Vérifier les collisions avec les bords et les murs
-// 	map_x = (int)(new_x);
-// 	map_y = (int)(new_y);
-	
-// 	if (map_y >= 0 && map_y < game->map_height && 
-// 		map_x >= 0 && map_x < game->map_width)
-// 	{
-// 		if (game->map[map_y][map_x] != '1')
-// 		{
-// 			game->player.pos_x = new_x;
-// 			game->player.pos_y = new_y;
-// 		}
-// 	}
-// }
-
-
-// void	render(t_game *game)
-// {
-// 	int i, j;
-// 	char cell;
-	
-// 	// Effacer l'image
-// 	mlx_destroy_image(game->mlx, game->img);
-// 	game->img = mlx_new_image(game->mlx, MAX_WIDTH, MAX_HEIGHT);
-// 	game->addr = mlx_get_data_addr(game->img, &game->bits_per_pixel,
-// 								&game->line_length, &game->endian);
-	
-// 	// Dessiner la map dans l'image buffer
-// 	i = 0;
-// 	while (game->map && game->map[i])
-// 	{
-// 		j = 0;
-// 		while (game->map[i][j])
-// 		{
-// 			cell = game->map[i][j];
-// 			int x = j * BITS_SIZE;
-// 			int y = i * BITS_SIZE;
-			
-// 			if (cell == '1')
-// 				mlx_put_image_to_window(game->mlx, game->img, game->wall, x, y);
-// 			else if (cell == '0' || cell == 'P')
-// 				mlx_put_image_to_window(game->mlx, game->img, game->floor, x, y);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-	
-// 	// Dessiner le joueur (séparément de la map)
-// 	int px = (int)(game->player.pos_x * BITS_SIZE);
-// 	int py = (int)(game->player.pos_y * BITS_SIZE);
-// 	mlx_put_image_to_window(game->mlx, game->img, game->player_img, px, py);
-	
-// 	// Afficher l'image buffer dans la fenêtre
-// 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
-// }
-
-
-// int	key_pressed(int touch, t_game *game)
-// {
-	// if (touch == ESC)
-	// 	close_wind(game);
-// 	else if (touch == RIGHT)
-// 		game->player.key_right = true;
-// 	else if (touch == LEFT)
-// 		game->player.key_left = true;
-// 	else if (touch == UP)
-// 		game->player.key_up = true;
-// 	else if (touch == DOWN)
-// 		game->player.key_down = true;
-// 	return (0);
-// }
-
-// int	key_release(int touch, t_game *game)
-// {
-// 	if (touch == ESC)
-// 		close_wind(game);
-// 	else if (touch == RIGHT)
-// 		game->player.key_right = false;
-// 	else if (touch == LEFT)
-// 		game->player.key_left = false;
-// 	else if (touch == UP)
-// 		game->player.key_up = false;
-// 	else if (touch == DOWN)
-// 		game->player.key_down = false;
-// 	return (0);
-// }
-
-
-// int	draw_loop(t_game *game)
-// {
-// 	if (!game || !game->map)
-// 		return (0);
-	
-// 	if (game->player.key_up || game->player.key_down || 
-// 		game->player.key_left || game->player.key_right)
-// 	{
-// 		move_player(game);
-// 		render(game);
-// 	}
-// 	return (0);
-// }
-
-// /********************************************************************* */
-// /********************************************************************* */
-// /********************************************************************* */
-// /********************************************************************* */
-// /********************************************************************* */
-
-// int main (int ac, char **av)
-// {
-// 	(void)ac;
-// 	t_game game;
-
-// 	if (init_game(&game))
-// 		return (1);
-// 	if (fill_data(&game, av))
-// 		return (close_wind(&game), 0);
-// 	mlx_hook(game.win, 2, 1L << 0, (void*)key_pressed, &game);
-// 	mlx_hook(game.win, 3, 1L << 0, (void*)key_release, &game);
-	// mlx_hook((&game)->win, CLOSE_MOUSE, 0, (void *)close_wind, &game);
-// 	mlx_loop_hook(game.mlx, (void *)draw_loop, &game);
-// 	mlx_loop(game.mlx);
-// 	return (0);
-// }
-   /********************************************************/
-
 
 
 int delete_all_image(t_game *game)
@@ -629,64 +405,62 @@ void	player_initialisation(t_player *player)
 	player->right_rotation = false;
 }
 
-void	released_key(int keycode, t_game *game)
+void	released_key(int keycode, t_player *player)
 {
-	t_player	*player;
-
-	player = &game->player;
 	if (keycode == UP)
 		player->key_up = false;
-	if (keycode == DOWN)
+	else if (keycode == DOWN)
 		player->key_down = false;
-	if (keycode == RIGHT)
+	else if (keycode == RIGHT)
 		player->key_right = false;
-	if (keycode == LEFT)
+	else if (keycode == LEFT)
 		player->key_left = false;
-	if (keycode == ARR_LEFT)
+	else if (keycode == ARR_LEFT)
 		player->left_rotation = false;
-	if (keycode == ARR_RIGHT)
+	else if (keycode == ARR_RIGHT)
 		player->right_rotation = false;
-
 }
+
+
+
 
 void	pressed_key(int keycode, t_game *game)
 {
-	t_player	*player;
-
-	player = &game->player;
 	if (keycode == ESC)
 		close_wind(game);
 	if (keycode == UP)
 	{
-		player->key_up = true;
-		player->key_down = false;
+		game->player.key_up = true;
+		game->player.key_down = false;
 	}
-	if (keycode == DOWN)
+	else if (keycode == DOWN)
 	{
-		player->key_down = true;
-		player->key_up = false;
+		game->player.key_down = true;
+		game->player.key_up = false;
 	}
-	if (keycode == RIGHT)
+	else if (keycode == RIGHT)
 	{
-		player->key_right = true;
-		player->key_left = false;
+		game->player.key_right = true;
+		game->player.key_left = false;
 	}
-	if (keycode == LEFT)
+	else if (keycode == LEFT)
 	{
-		player->key_left = true;
-		player->key_right = false;
+		game->player.key_left = true;
+		game->player.key_right = false;
 	}
-	if (keycode == ARR_LEFT)
+	else if (keycode == ARR_LEFT)
 	{
-			player->left_rotation = true;
-			player->right_rotation = false;
+		game->player.left_rotation = true;
+		game->player.right_rotation = false;
 	}
-		if (keycode == ARR_RIGHT)
+		else if (keycode == ARR_RIGHT)
 	{
-			player->right_rotation = true;
-			player->left_rotation = false;
+		game->player.right_rotation = true;
+		game->player.left_rotation = false;
 	}
 }
+
+
 
 void	player_mouvement(t_player *player)
 {
@@ -695,7 +469,7 @@ void	player_mouvement(t_player *player)
 	float	cos_angle;
 	float	sin_angle;
 
-	speed = 10;
+	speed = 2;
 	speed_angle = 0.03;
 	cos_angle = cos(player->angle);
 	sin_angle = sin(player->angle);
@@ -709,7 +483,7 @@ void	player_mouvement(t_player *player)
 	if (player->angle < 0)
 		player->angle = 2 * PI;
 
-
+	// faire en sorte que la rotation sarrete une fois que la touche nest plus pressee
     if (player->key_down)
     {
         player->pos_x += cos_angle * speed;
@@ -783,15 +557,62 @@ void	draw_map(t_game *game)
 	}
 }
 
+bool	touch(float	pos_x, float pos_y, t_game *game)
+{
+	int	x;
+	int	y;
+
+	x = pos_x / BLOCK;
+	y = pos_y / BLOCK;
+	if (game->map[y][x] == '1')
+		return true;
+	return false;
+}
+
+void	draw_line(t_player *player, t_game *game, float x_started)
+{
+	float	angle_cos;
+	float	angle_sin;
+	float	x_ray;
+	float	y_ray;
+
+	angle_cos = cos(x_started);
+	angle_sin = sin(x_started);
+	x_ray = player->pos_x;
+	y_ray = player->pos_y;
+	while(!touch(x_ray, y_ray, game))
+	{
+		put_pixel(x_ray, y_ray, 0xFF0000, game);
+		x_ray += angle_cos;
+		y_ray += angle_sin;
+	}
+}
+
 int	draw_loop(t_game *game)
 {
 	t_player	*player;
+	float		fraction;
+	float		x_start;
+	int			i;
 
 	player = &game->player;
+	
+	fraction = PI / 3 / MAX_WIDTH;
+	x_start = player->angle - PI / 6;
+	
 	player_mouvement(player);
 	clear_image(game);
 	draw_player(game->player.pos_x, game->player.pos_y, 10, 0x00FF00, game);
 	draw_map(game);
+
+	i = 0;
+	while (i < MAX_WIDTH)
+	{
+		draw_line(player, game, x_start);
+		x_start += fraction;
+		i++;
+	}
+
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);
 }
@@ -805,10 +626,9 @@ int	main(int ac, char **av)
 
 	game_initiation(&game, av);
 	mlx_hook(game.win, 2, 1L<<0, (void *)pressed_key, &game);
-	mlx_hook(game.win, 3, 1L<<0, (void *)released_key, &game);
+	mlx_hook(game.win, 3, 1L<<1, (void *)released_key, &game.player);
 	mlx_hook((&game)->win, CLOSE_MOUSE, 0, (void *)close_wind, &game);
 	mlx_loop_hook(game.mlx, (void *)draw_loop, &game);
 	mlx_loop(game.mlx);
 	return (0);
 }
-
