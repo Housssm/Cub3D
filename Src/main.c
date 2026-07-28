@@ -95,7 +95,7 @@ char	**extract_map(char **av, t_game *game)
 int	find_pos(t_game *game)
 {
 	size_t	i;
-	size_t		j;
+	size_t	j;
 	char	*charset;
 
 	i = 0;
@@ -107,11 +107,11 @@ int	find_pos(t_game *game)
 		{
 			if (find_player(game->map[i][j], charset))
 			{
-					game->player.pos_x = j * 64 + 32;
-					game->player.pos_y = i * 64 + 32;
-					// direction = init_direction(tab[i][j]);
-					game->map[i][j] = '0';
-					return (0);
+				game->player.pos_x = j * 64 + 32;
+				game->player.pos_y = i * 64 + 32;
+				// direction = init_direction(tab[i][j]);
+				game->map[i][j] = '0';
+				return (0);
 			}
 			j++;
 		}
@@ -133,7 +133,6 @@ int	find_pos(t_game *game)
 // 	game->wall = mlx_xpm_file_to_image(game->mlx, "images/wall.xpm", &img_width, &img_height);
 // 	game->floor = mlx_xpm_file_to_image(game->mlx, "images/floor.xpm", &img_width, &img_height);
 // 	game->player_img = mlx_xpm_file_to_image(game->mlx, "images/perso.xpm", &img_width, &img_height);
-	
 // 	if (!game->wall || !game->floor || !game->player_img)
 // 	{
 // 		ft_putstr_fd("Error: Image loading failed\n", 2);
@@ -142,8 +141,7 @@ int	find_pos(t_game *game)
 // 	return (0);
 // }
 
-
-int delete_all_image(t_game *game)
+int	delete_all_image(t_game *game)
 {
 // 	if (game->wall)
 // 		mlx_destroy_image(game->mlx, game->wall);
@@ -160,7 +158,7 @@ int delete_all_image(t_game *game)
 	return (0);
 }
 
-int close_wind(t_game *game)
+int	close_wind(t_game *game)
 {
 	delete_all_image(game);
 	if (game->win)
@@ -193,7 +191,6 @@ void	clear_image(t_game *game)
 		i++;
 	}
 }
-
 
 int	fill_data(t_game *game,char **av)
 {
@@ -270,34 +267,52 @@ void	pressed_key(int keycode, t_game *game)
 	if (keycode == ESC)
 		close_wind(game);
 	if (keycode == UP)
-	{
 		game->player.key_up = true;
-		game->player.key_down = false;
-	}
 	else if (keycode == DOWN)
-	{
 		game->player.key_down = true;
-		game->player.key_up = false;
-	}
 	else if (keycode == RIGHT)
-	{
 		game->player.key_right = true;
-		game->player.key_left = false;
-	}
 	else if (keycode == LEFT)
-	{
 		game->player.key_left = true;
-		game->player.key_right = false;
-	}
 	else if (keycode == ARR_LEFT)
-	{
 		game->player.left_rotation = true;
-		game->player.right_rotation = false;
-	}
 	else if (keycode == ARR_RIGHT)
-	{
 		game->player.right_rotation = true;
-		game->player.left_rotation = false;
+}
+
+void	player_rotation(t_player *player, float speed_angle)
+{
+	if (player->left_rotation)
+		player->angle -= speed_angle;
+	if (player->right_rotation)
+		player->angle += speed_angle;
+	if (player->angle > 2 * PI)
+		player->angle = 0;
+	if (player->angle < 0)
+		player->angle = 2 * PI;
+}
+
+void	player_translation(t_player *player, float cos_angle, float sin_angle, float speed)
+{
+	if (player->key_up)
+	{
+		player->pos_x += cos_angle * speed;
+		player->pos_y += sin_angle * speed;
+	}
+	if (player->key_down)
+	{
+		player->pos_x -= cos_angle * speed;
+		player->pos_y -= sin_angle * speed;
+	}
+	if (player->key_left)
+	{
+		player->pos_x += sin_angle * speed;
+		player->pos_y -= cos_angle * speed;
+	}
+	if (player->key_right)
+	{
+		player->pos_x -= sin_angle * speed;
+		player->pos_y += cos_angle * speed;
 	}
 }
 
@@ -312,37 +327,12 @@ void	player_mouvement(t_player *player)
 	speed_angle = 0.03;
 	cos_angle = cos(player->angle);
 	sin_angle = sin(player->angle);
-	if (player->left_rotation)
-		player->angle -= speed_angle;
-	if (player->right_rotation)
-		player->angle += speed_angle;
-	if (player->angle > 2 * PI)
-		player->angle = 0;
-	if (player->angle < 0)
-		player->angle = 2 * PI;
-	if (player->key_down)
-	{
-		player->pos_x += cos_angle * speed;
-		player->pos_y += sin_angle * speed;
-	}
-	if (player->key_up)
-	{
-		player->pos_x -= cos_angle * speed;
-		player->pos_y -= sin_angle * speed;
-	}
-	if (player->key_right)
-	{
-		player->pos_x += sin_angle * speed;
-		player->pos_y -= cos_angle * speed;
-	}
-	if (player->key_left)
-	{
-		player->pos_x -= sin_angle * speed;
-		player->pos_y += cos_angle * speed;
-	}
+
+	player_rotation(player, speed_angle);
+	player_translation(player, cos_angle, sin_angle, speed);
 }
 
-void put_pixel(int x, int y, int color, t_game *game)
+void	put_pixel(int x, int y, int color, t_game *game)
 {
 	int	index;
 
@@ -353,8 +343,6 @@ void put_pixel(int x, int y, int color, t_game *game)
 	game->data[index + 1] = (color >> 8) & 0xFF;
 	game->data[index + 2] = (color >> 16) & 0xFF;
 }
-
-
 
 bool	touch(float pos_x, float pos_y, t_game *game)
 {
@@ -389,33 +377,26 @@ float	distance_fixed(float x_ray, float y_ray, t_game *game)
 
 void	draw_line(t_player *player, t_game *game, float beg_x, int i)
 {
-	float	angle_cos;
-	float	angle_sin;
-	float	x_ray;
-	float	y_ray;
-	float	dist;
-	float	height;
-	int		beg_y;
-	int		end;
+	t_raycast	*raycast;
 
-	angle_cos = cos(beg_x);
-	angle_sin = sin(beg_x);
-	x_ray = player->pos_x;
-	y_ray = player->pos_y;
-	while (!touch(x_ray, y_ray, game))
+	raycast = &game->raycast;
+	raycast->angle_cos = cos(beg_x);
+	raycast->angle_sin = sin(beg_x);
+	raycast->x_ray = player->pos_x;
+	raycast->y_ray = player->pos_y;
+	while (!touch(raycast->x_ray, raycast->y_ray, game))
 	{
-		// put_pixel(x_ray, y_ray, 0xFF0000, game);
-		x_ray += angle_cos;
-		y_ray += angle_sin;
+		raycast->x_ray += raycast->angle_cos;
+		raycast->y_ray += raycast->angle_sin;
 	}
-	dist = distance_fixed(x_ray, y_ray, game);
-	height = (BLOCK / dist) * (MAX_WIDTH / 2);
-	beg_y = (MAX_HEIGHT - height) / 2;
-	end = beg_y + height;
-	while (beg_y < end)
+	raycast->dist = distance_fixed(raycast->x_ray, raycast->y_ray, game);
+	raycast->height = (BLOCK / raycast->dist) * (MAX_WIDTH / 2);
+	raycast->beg_y = (MAX_HEIGHT - raycast->height) / 2;
+	raycast->end = raycast->beg_y + raycast->height;
+	while (raycast->beg_y < raycast->end)
 	{
-		put_pixel(i, beg_y, 255, game);
-		beg_y++;
+		put_pixel(i, raycast->beg_y, 255, game);
+		raycast->beg_y++;
 	}
 }
 

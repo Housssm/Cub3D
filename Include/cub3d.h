@@ -55,6 +55,19 @@ typedef struct s_minimap
 	int	block_size;
 } t_minimap;
 
+typedef	struct s_raycast
+{
+	float	angle_cos;
+	float	angle_sin;
+	float	x_ray;
+	float	y_ray;
+	float	dist;
+	float	height;
+	int		beg_y;
+	int		end;
+} t_raycast;
+
+
 typedef struct s_game
 {
 	void	*mlx;
@@ -71,6 +84,7 @@ typedef struct s_game
 
 	t_player	player;
 	t_minimap	minimap;
+	t_raycast	raycast;
 }	t_game;
 
 void	player_initialisation(t_player *player);
