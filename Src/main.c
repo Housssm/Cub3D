@@ -569,24 +569,60 @@ bool	touch(float	pos_x, float pos_y, t_game *game)
 	return false;
 }
 
-void	draw_line(t_player *player, t_game *game, float x_started)
+float	distance(float x, float y)
+{
+	return (sqrt(x * x + y * y));
+}
+
+float	distance_fixed(float pos_x, float pos_y, float x_ray, float y_ray, t_game *game)
+{
+	float	x_delta;
+	float	y_delta;
+	float	angle;
+	float	dist_fixed;
+
+	x_delta = x_ray - pos_x;
+	y_delta = y_ray - pos_y;
+	angle = atan2(y_delta, x_delta) - game->player.angle; 
+	dist_fixed = distance(x_delta, y_delta) * cos(angle);
+	return (dist_fixed);
+}
+
+
+void	draw_line(t_player *player, t_game *game, float beg_x, int i)
 {
 	float	angle_cos;
 	float	angle_sin;
 	float	x_ray;
 	float	y_ray;
+	
+	float	dist;
+	float	height;
+	int		beg_y;
+	int		end;
 
-	angle_cos = cos(x_started);
-	angle_sin = sin(x_started);
+	angle_cos = cos(beg_x);
+	angle_sin = sin(beg_x);
 	x_ray = player->pos_x;
 	y_ray = player->pos_y;
+
 	while(!touch(x_ray, y_ray, game))
 	{
-		put_pixel(x_ray, y_ray, 0xFF0000, game);
+		// put_pixel(x_ray, y_ray, 0xFF0000, game);
 		x_ray += angle_cos;
 		y_ray += angle_sin;
 	}
+	dist = distance_fixed(player->pos_x, player->pos_y, x_ray, y_ray, game);
+	height = (BLOCK / dist) * (MAX_WIDTH / 2);
+	beg_y = (MAX_HEIGHT - height) / 2;
+	end = beg_y + height;
+	while(beg_y < end)
+	{
+		put_pixel(i, beg_y, 255, game);
+		beg_y++;
+	}
 }
+
 
 int	draw_loop(t_game *game)
 {
@@ -602,13 +638,13 @@ int	draw_loop(t_game *game)
 	
 	player_mouvement(player);
 	clear_image(game);
-	draw_player(game->player.pos_x, game->player.pos_y, 10, 0x00FF00, game);
-	draw_map(game);
+	// draw_player(game->player.pos_x, game->player.pos_y, 10, 0x00FF00, game);
+	// draw_map(game);
 
 	i = 0;
 	while (i < MAX_WIDTH)
 	{
-		draw_line(player, game, x_start);
+		draw_line(player, game, x_start, i);
 		x_start += fraction;
 		i++;
 	}
