@@ -192,7 +192,7 @@ void	clear_image(t_game *game)
 	}
 }
 
-int	fill_data(t_game *game,char **av)
+int	fill_data(t_game *game, char **av)
 {
 	game->map = extract_map(av, game);
 	if (!game->map)
@@ -280,6 +280,28 @@ void	pressed_key(int keycode, t_game *game)
 		game->player.right_rotation = true;
 }
 
+
+
+int	is_wall(t_game *game, float x, float y)
+{
+	int	pos_x;
+	int	pos_y;
+	int	height_max;
+	int	width_max;
+
+	height_max = game->map_height;
+	width_max = game->map_width;
+
+	pos_x = (int)(x / BLOCK);
+	pos_y = (int)(y / BLOCK);
+
+	if (pos_y < 0 || pos_x < 0 || pos_y > height_max || pos_x > width_max)
+		return (1);
+	if (game->map[pos_y][pos_x] == '1')
+		return (1);
+	return (0);
+}
+
 void	player_rotation(t_player *player, float speed_angle)
 {
 	if (player->left_rotation)
@@ -292,9 +314,14 @@ void	player_rotation(t_player *player, float speed_angle)
 		player->angle = 2 * PI;
 }
 
-void	player_translation(t_player *player, float cos_angle, float sin_angle, float speed)
+void	player_translation(t_player *player, float cos_angle,
+		float sin_angle, float speed)
 {
-	if (player->key_up)
+	float	old_x;
+	float	old_y;
+
+
+	if (player->key_up )
 	{
 		player->pos_x += cos_angle * speed;
 		player->pos_y += sin_angle * speed;
@@ -316,6 +343,7 @@ void	player_translation(t_player *player, float cos_angle, float sin_angle, floa
 	}
 }
 
+
 void	player_mouvement(t_player *player)
 {
 	int		speed;
@@ -327,7 +355,6 @@ void	player_mouvement(t_player *player)
 	speed_angle = 0.03;
 	cos_angle = cos(player->angle);
 	sin_angle = sin(player->angle);
-
 	player_rotation(player, speed_angle);
 	player_translation(player, cos_angle, sin_angle, speed);
 }
