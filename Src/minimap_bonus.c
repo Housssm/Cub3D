@@ -34,7 +34,7 @@ void	draw_map(t_game *game)
 			{
 				xy[0] = game->minimap.offset_x + j * game->minimap.block_size;
 				xy[1] = game->minimap.offset_y + i * game->minimap.block_size;
-				draw_block(game, xy, game->minimap.block_size, 0x0000FF);
+				draw_block(game, xy, game->minimap.block_size, 0xFFC0CB);
 			}
 			j++;
 		}

@@ -88,6 +88,8 @@ char	**extract_map(char **av, t_game *game)
 	close(fd);
 	tab[j] = NULL;
 	game->map_height = len_fd;
+	if (len_fd > 0)
+		game->map_width = ft_strlen(tab[0]); 
 	remove_newline(tab);
 	return (tab);
 }
@@ -194,6 +196,7 @@ void	clear_image(t_game *game)
 
 int	fill_data(t_game *game, char **av)
 {
+	game->player.game = game;
 	game->map = extract_map(av, game);
 	if (!game->map)
 		return (1);
@@ -211,6 +214,7 @@ int	fill_data(t_game *game, char **av)
 int	game_initiation(t_game *game, char **av)
 {
 	fill_data(game, av);
+
 	game->mlx = mlx_init();
 	if (!game->mlx)
 	{
@@ -280,27 +284,21 @@ void	pressed_key(int keycode, t_game *game)
 		game->player.right_rotation = true;
 }
 
-
-
-int	is_wall(t_game *game, float x, float y)
+int is_wall(t_game *game, float x, float y)
 {
-	int	pos_x;
-	int	pos_y;
-	int	height_max;
-	int	width_max;
+    int map_x;
+    int map_y;
 
-	height_max = game->map_height;
-	width_max = game->map_width;
-
-	pos_x = (int)(x / BLOCK);
-	pos_y = (int)(y / BLOCK);
-
-	if (pos_y < 0 || pos_x < 0 || pos_y > height_max || pos_x > width_max)
-		return (1);
-	if (game->map[pos_y][pos_x] == '1')
-		return (1);
-	return (0);
+    map_x = (int)(x / BLOCK);
+    map_y = (int)(y / BLOCK);
+    
+    // Vérifie les limites de la map
+    if (map_x < 0 || map_x >= game->map_width || map_y < 0 || map_y >= game->map_height)
+        return (1);
+    
+    return (game->map[map_y][map_x] == '1');
 }
+
 
 void	player_rotation(t_player *player, float speed_angle)
 {
@@ -314,49 +312,69 @@ void	player_rotation(t_player *player, float speed_angle)
 		player->angle = 2 * PI;
 }
 
-void	player_translation(t_player *player, float cos_angle,
-		float sin_angle, float speed)
+void player_translation(t_player *player, t_game *game, float cos_angle, float sin_angle)
 {
-	float	old_x;
-	float	old_y;
+    int speed;
+    float new_x;
+    float new_y;
 
-
-	if (player->key_up )
-	{
-		player->pos_x += cos_angle * speed;
-		player->pos_y += sin_angle * speed;
-	}
-	if (player->key_down)
-	{
-		player->pos_x -= cos_angle * speed;
-		player->pos_y -= sin_angle * speed;
-	}
-	if (player->key_left)
-	{
-		player->pos_x += sin_angle * speed;
-		player->pos_y -= cos_angle * speed;
-	}
-	if (player->key_right)
-	{
-		player->pos_x -= sin_angle * speed;
-		player->pos_y += cos_angle * speed;
-	}
+    speed = 2;
+    
+    if (player->key_up)
+    {
+        new_x = player->pos_x + cos_angle * speed;
+        new_y = player->pos_y + sin_angle * speed;
+        
+        if (!is_wall(game, new_x, player->pos_y))
+            player->pos_x = new_x;
+        if (!is_wall(game, player->pos_x, new_y))
+            player->pos_y = new_y;
+    }
+    if (player->key_down)
+    {
+        new_x = player->pos_x - cos_angle * speed;
+        new_y = player->pos_y - sin_angle * speed;
+        
+        if (!is_wall(game, new_x, player->pos_y))
+            player->pos_x = new_x;
+        if (!is_wall(game, player->pos_x, new_y))
+            player->pos_y = new_y;
+    }
+    if (player->key_right)
+    {
+        new_x = player->pos_x + sin_angle * speed;
+        new_y = player->pos_y - cos_angle * speed;
+        
+        if (!is_wall(game, new_x, player->pos_y))
+            player->pos_x = new_x;
+        if (!is_wall(game, player->pos_x, new_y))
+            player->pos_y = new_y;
+    }
+    if (player->key_left)
+    {
+        new_x = player->pos_x - sin_angle * speed;
+        new_y = player->pos_y + cos_angle * speed;
+        
+        if (!is_wall(game, new_x, player->pos_y))
+            player->pos_x = new_x;
+        if (!is_wall(game, player->pos_x, new_y))
+            player->pos_y = new_y;
+    }
 }
-
 
 void	player_mouvement(t_player *player)
 {
-	int		speed;
+	// int		speed;
 	float	speed_angle;
 	float	cos_angle;
 	float	sin_angle;
 
-	speed = 2;
+	// speed = 2;
 	speed_angle = 0.03;
 	cos_angle = cos(player->angle);
 	sin_angle = sin(player->angle);
 	player_rotation(player, speed_angle);
-	player_translation(player, cos_angle, sin_angle, speed);
+	player_translation(player, player->game, cos_angle, sin_angle);
 }
 
 void	put_pixel(int x, int y, int color, t_game *game)
