@@ -78,9 +78,15 @@ typedef struct s_game
 	int		bpp; //buffer
 	int		size_line;
 	int		endian;
-
 	int		map_height;
 	int		map_width;
+	int		ceiling;
+	int		floor;
+
+	int		east_cost;
+	int		west_cost;
+	int		north_cost;
+	int		south_cost;
 
 	t_player	player;
 	t_minimap	minimap;

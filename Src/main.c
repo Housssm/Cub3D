@@ -122,41 +122,10 @@ int	find_pos(t_game *game)
 	return (1);
 }
 
-// int	file_to_img(t_game *game)
-// {
-// 	int	img_width;
-// 	int	img_height;
-
-// 	if (!game || !game->mlx)
-// 		return (1);
-// 	img_width = BITS_SIZE;
-// 	img_height = BITS_SIZE;
-
-// 	game->wall = mlx_xpm_file_to_image(game->mlx, "images/wall.xpm", &img_width, &img_height);
-// 	game->floor = mlx_xpm_file_to_image(game->mlx, "images/floor.xpm", &img_width, &img_height);
-// 	game->player_img = mlx_xpm_file_to_image(game->mlx, "images/perso.xpm", &img_width, &img_height);
-// 	if (!game->wall || !game->floor || !game->player_img)
-// 	{
-// 		ft_putstr_fd("Error: Image loading failed\n", 2);
-// 		return (1);
-// 	}
-// 	return (0);
-// }
-
 int	delete_all_image(t_game *game)
 {
-// 	if (game->wall)
-// 		mlx_destroy_image(game->mlx, game->wall);
-// 	if (game->floor)
-// 		mlx_destroy_image(game->mlx, game->floor);
-// 	if (game->player_img)
-// 		mlx_destroy_image(game->mlx, game->player_img);
 	if (game->img)
 		mlx_destroy_image(game->mlx, game->img);
-// 	game->wall = NULL;
-// 	game->floor = NULL;
-// 	game->player_img = NULL;
-// 	game->img = NULL;
 	return (0);
 }
 
@@ -170,8 +139,8 @@ int	close_wind(t_game *game)
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
 	}
-	// if (game->map)
-	//     free_split(game->map);
+	if (game->map)
+		free_split(game->map);
 	exit(0);
 	return (0);
 }
@@ -203,6 +172,10 @@ int	fill_data(t_game *game, char **av)
 	player_initialisation(&game->player);
 	if (find_pos(game) != 0)
 		return (1);
+
+	game->ceiling = 0x87CEEB;
+	game->floor = 0x8B7355;
+
 	game->minimap.offset_x = 10;
 	game->minimap.offset_y = 10;
 	game->minimap.block_size = 10;
@@ -312,55 +285,59 @@ void	player_rotation(t_player *player, float speed_angle)
 		player->angle = 2 * PI;
 }
 
+
+
+
 void player_translation(t_player *player, t_game *game, float cos_angle, float sin_angle)
 {
-    int speed;
-    float new_x;
-    float new_y;
+	int speed;
+	float new_x;
+	float new_y;
 
-    speed = 2;
-    
-    if (player->key_up)
-    {
-        new_x = player->pos_x + cos_angle * speed;
-        new_y = player->pos_y + sin_angle * speed;
-        
-        if (!is_wall(game, new_x, player->pos_y))
-            player->pos_x = new_x;
-        if (!is_wall(game, player->pos_x, new_y))
-            player->pos_y = new_y;
-    }
-    if (player->key_down)
-    {
-        new_x = player->pos_x - cos_angle * speed;
-        new_y = player->pos_y - sin_angle * speed;
-        
-        if (!is_wall(game, new_x, player->pos_y))
-            player->pos_x = new_x;
-        if (!is_wall(game, player->pos_x, new_y))
-            player->pos_y = new_y;
-    }
-    if (player->key_right)
-    {
-        new_x = player->pos_x + sin_angle * speed;
-        new_y = player->pos_y - cos_angle * speed;
-        
-        if (!is_wall(game, new_x, player->pos_y))
-            player->pos_x = new_x;
-        if (!is_wall(game, player->pos_x, new_y))
-            player->pos_y = new_y;
-    }
-    if (player->key_left)
-    {
-        new_x = player->pos_x - sin_angle * speed;
-        new_y = player->pos_y + cos_angle * speed;
-        
-        if (!is_wall(game, new_x, player->pos_y))
-            player->pos_x = new_x;
-        if (!is_wall(game, player->pos_x, new_y))
-            player->pos_y = new_y;
-    }
+	speed = 2;
+	
+	if (player->key_up)
+	{
+		new_x = player->pos_x + cos_angle * speed;
+		new_y = player->pos_y + sin_angle * speed;
+		
+		if (!is_wall(game, new_x, player->pos_y))
+			player->pos_x = new_x;
+		if (!is_wall(game, player->pos_x, new_y))
+			player->pos_y = new_y;
+	}
+	if (player->key_down)
+	{
+		new_x = player->pos_x - cos_angle * speed;
+		new_y = player->pos_y - sin_angle * speed;
+		
+		if (!is_wall(game, new_x, player->pos_y))
+			player->pos_x = new_x;
+		if (!is_wall(game, player->pos_x, new_y))
+			player->pos_y = new_y;
+	}
+	if (player->key_right)
+	{
+		new_x = player->pos_x + sin_angle * speed;
+		new_y = player->pos_y - cos_angle * speed;
+		
+		if (!is_wall(game, new_x, player->pos_y))
+			player->pos_x = new_x;
+		if (!is_wall(game, player->pos_x, new_y))
+			player->pos_y = new_y;
+	}
+	if (player->key_left)
+	{
+		new_x = player->pos_x - sin_angle * speed;
+		new_y = player->pos_y + cos_angle * speed;
+		
+		if (!is_wall(game, new_x, player->pos_y))
+			player->pos_x = new_x;
+		if (!is_wall(game, player->pos_x, new_y))
+			player->pos_y = new_y;
+	}
 }
+
 
 void	player_mouvement(t_player *player)
 {
@@ -420,6 +397,28 @@ float	distance_fixed(float x_ray, float y_ray, t_game *game)
 	return (dist_fixed);
 }
 
+void	draw_column(t_game *game, int x, t_raycast *raycast)
+{
+	int	y;
+
+	y = 0;
+	while (y < raycast->beg_y)
+	{
+		put_pixel(x, y, game->ceiling, game);
+		y++;
+	}
+	while (y < raycast->end)
+	{
+		put_pixel(x, y, 255, game);
+		y++;
+	}
+	while(y < MAX_HEIGHT)
+	{
+		put_pixel(x, y, game->floor, game);
+		y++;
+	}
+}
+
 void	draw_line(t_player *player, t_game *game, float beg_x, int i)
 {
 	t_raycast	*raycast;
@@ -438,11 +437,7 @@ void	draw_line(t_player *player, t_game *game, float beg_x, int i)
 	raycast->height = (BLOCK / raycast->dist) * (MAX_WIDTH / 2);
 	raycast->beg_y = (MAX_HEIGHT - raycast->height) / 2;
 	raycast->end = raycast->beg_y + raycast->height;
-	while (raycast->beg_y < raycast->end)
-	{
-		put_pixel(i, raycast->beg_y, 255, game);
-		raycast->beg_y++;
-	}
+	draw_column(game, i, raycast);
 }
 
 int	draw_loop(t_game *game)
@@ -456,7 +451,6 @@ int	draw_loop(t_game *game)
 	fraction = PI / 3 / MAX_WIDTH;
 	x_start = player->angle - PI / 6;
 	player_mouvement(player);
-	clear_image(game);
 	i = 0;
 	while (i < MAX_WIDTH)
 	{
