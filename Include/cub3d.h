@@ -27,7 +27,7 @@
 # define DOWN 115
 # define ARR_RIGHT 65363
 # define ARR_LEFT 65361
-# define MOUSE_SENS 0.002
+# define MOUSE_SENS 0.001
 # define PI 3.1415926535
 # define NORTH (3 * PI / 2)
 # define SOUTH (PI / 2)
