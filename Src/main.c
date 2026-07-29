@@ -249,31 +249,31 @@ void	player_initialisation(t_player *player)
 
 int mouse_mvmt(int x, int y, t_game *game)
 {
-    static int last_x = -1;
-    int delta_x;
-    int center_x = MAX_WIDTH / 2;
-    int center_y = MAX_HEIGHT / 2;
+	static int last_x = -1;
+	int delta_x;
+	int center_x = MAX_WIDTH / 2;
+	int center_y = MAX_HEIGHT / 2;
 
-    (void)y;
-    if (x <= 5 || x >= MAX_WIDTH - 5 || y <= 5 || y >= MAX_HEIGHT - 5)
-    {
-        mlx_mouse_move(game->mlx, game->win, center_x, center_y);
-        last_x = center_x;
-        return (0);
-    }
-    if (last_x == -1)
-    {
-        last_x = x;
-        return (0);
-    }
+	(void)y;
+	if (x <= 5 || x >= MAX_WIDTH - 5 || y <= 5 || y >= MAX_HEIGHT - 5)
+	{
+		mlx_mouse_move(game->mlx, game->win, center_x, center_y);
+		last_x = center_x;
+		return (0);
+	}
+	if (last_x == -1)
+	{
+		last_x = x;
+		return (0);
+	}
 	delta_x = x - last_x;
-    game->player.angle += delta_x * MOUSE_SENS;
-    if (game->player.angle > 2 * PI)
-        game->player.angle -= 2 * PI;
-    if (game->player.angle < 0)
-        game->player.angle += 2 * PI;
-    last_x = x;
-    return (0);
+	game->player.angle += delta_x * MOUSE_SENS;
+	if (game->player.angle > 2 * PI)
+		game->player.angle -= 2 * PI;
+	if (game->player.angle < 0)
+		game->player.angle += 2 * PI;
+	last_x = x;
+	return (0);
 }
 
 void	released_key(int keycode, t_player *player)
