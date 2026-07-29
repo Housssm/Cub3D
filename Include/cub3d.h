@@ -20,7 +20,6 @@
 # define BITS_SIZE 64
 # define MAX_WIDTH 1920
 # define MAX_HEIGHT 1080
-# define BLOCK  64
 # define ESC 65307
 # define RIGHT 100
 # define LEFT 97
@@ -28,11 +27,12 @@
 # define DOWN 115
 # define ARR_RIGHT 65363
 # define ARR_LEFT 65361
+# define MOUSE_SENS 0.002
 # define PI 3.1415926535
-# define NORTH 0.0
-# define SOUTH PI
-# define EAST (PI /2)
-# define WEST (3 * PI / 2)
+# define NORTH (3 * PI / 2)
+# define SOUTH (PI / 2)
+# define EAST 0.0
+# define WEST PI
 
 typedef struct s_game t_game;
 
@@ -69,6 +69,9 @@ typedef	struct s_raycast
 	float	height;
 	int		beg_y;
 	int		end;
+	int		wall_orientation;
+	int		side;
+	float	wall_x;
 } t_raycast;
 
 
@@ -91,6 +94,10 @@ typedef struct s_game
 	int		west_cost;
 	int		north_cost;
 	int		south_cost;
+
+	int		mouse_x;
+	int		mouse_moving;
+	int		mouse_hidden;
 
 	t_player	player;
 	t_minimap	minimap;

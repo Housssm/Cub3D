@@ -48,9 +48,9 @@ void	draw_player(t_game *game)
 	int	size;
 
 	size = 4;
-	xy[0] = game->minimap.offset_x + (int)(game->player.pos_x / BLOCK)
+	xy[0] = game->minimap.offset_x + (int)(game->player.pos_x / BITS_SIZE)
 		* game->minimap.block_size - size / 2;
-	xy[1] = game->minimap.offset_y + (int)(game->player.pos_y / BLOCK)
+	xy[1] = game->minimap.offset_y + (int)(game->player.pos_y / BITS_SIZE)
 		* game->minimap.block_size - size / 2;
 	draw_block(game, xy, size, 0x00FF00);
 }

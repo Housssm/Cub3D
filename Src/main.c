@@ -172,11 +172,19 @@ int	fill_data(t_game *game, char **av)
 	game->ceiling = 0x87CEEB;
 	game->floor = 0x8B7355;
 
+	game->east_cost = 0xFF0000;
+	game->west_cost = 0xFFFF00;
+	game->south_cost = 0x00FF00;
+	game->north_cost = 0x0000FF;
+
 	game->minimap.offset_x = 10;
 	game->minimap.offset_y = 10;
 	game->minimap.block_size = 10;
-	// if (file_to_img(game))
-	// 	return (1);
+
+	game->mouse_x = MAX_WIDTH / 2;
+	game->mouse_moving = 0;
+	game->mouse_hidden = 0;
+
 	return (0);
 }
 
@@ -218,6 +226,27 @@ void	player_initialisation(t_player *player)
 	player->right_rotation = false;
 }
 
+int	mouse_mvmt(int x,int y, t_game *game)
+{
+	static int	last_x = -1;
+	int			delta_x;
+
+	(void)y;
+	if (last_x == -1)
+	{
+		last_x = x;
+		return (0);
+	}
+	delta_x = x - last_x;
+	game->player.angle += delta_x * MOUSE_SENS;
+	if (game->player.angle > 2 * PI)
+		game->player.angle -= 2 * PI;
+	if (game->player.angle < 0)
+		game->player.angle += 2 * PI;
+	last_x = x;
+	return (0);
+}
+
 void	released_key(int keycode, t_player *player)
 {
 	if (keycode == UP)
@@ -257,8 +286,8 @@ int is_wall(t_game *game, float x, float y)
 	int map_x;
 	int map_y;
 
-	map_x = (int)(x / BLOCK);
-	map_y = (int)(y / BLOCK);	
+	map_x = (int)(x / BITS_SIZE);
+	map_y = (int)(y / BITS_SIZE);	
 	if (map_x < 0 || map_x >= game->map_width || map_y < 0 || map_y >= game->map_height)
 		return (1);
 	return (game->map[map_y][map_x] == '1');
@@ -304,7 +333,7 @@ void player_translation(t_player *player, t_game *game, float cos_angle, float s
 		if (!is_wall(game, player->pos_x, new_y))
 			player->pos_y = new_y;
 	}
-	if (player->key_right)
+	if (player->key_left)
 	{
 		new_x = player->pos_x + sin_angle * speed;
 		new_y = player->pos_y - cos_angle * speed;
@@ -314,7 +343,7 @@ void player_translation(t_player *player, t_game *game, float cos_angle, float s
 		if (!is_wall(game, player->pos_x, new_y))
 			player->pos_y = new_y;
 	}
-	if (player->key_left)
+	if (player->key_right)
 	{
 		new_x = player->pos_x - sin_angle * speed;
 		new_y = player->pos_y + cos_angle * speed;
@@ -352,13 +381,37 @@ void	put_pixel(int x, int y, int color, t_game *game)
 	game->data[index + 2] = (color >> 16) & 0xFF;
 }
 
+// void get_wall_orientation(t_raycast *ray)
+// {
+// 	float hit_x;
+// 	float hit_y;
+// 	int map_x;
+// 	int map_y;
+
+// 	//Convertir en index
+// 	map_x = (int)(ray->x_ray / BITS_SIZE);
+// 	map_y = (int)(ray->y_ray / BITS_SIZE);
+
+// 	//trouver la position dans la map
+// 	hit_x = ray->x_ray - map_x * BITS_SIZE;
+// 	hit_y = ray->y_ray - map_y * BITS_SIZE;
+
+// 	if (hit_y < 2 || hit_y > BITS_SIZE - 2) // 0 = nord et 64= sud
+// 		ray->wall_orientation = SOUTH;
+// 	else if (hit_x < 2 || hit_x > BITS_SIZE - 2) // env 0 = ouest et env64 = est ( y peut etre nimporte ou entre 0-64)
+// 		ray->wall_orientation = WEST;
+// 	else
+// 		ray->wall_orientation = WEST;
+// }
+
+
 bool	touch(float pos_x, float pos_y, t_game *game)
 {
 	int	x;
 	int	y;
 
-	x = pos_x / BLOCK;
-	y = pos_y / BLOCK;
+	x = pos_x / BITS_SIZE;
+	y = pos_y / BITS_SIZE;
 	if (game->map[y][x] == '1')
 		return (true);
 	return (false);
@@ -383,22 +436,35 @@ float	distance_fixed(float x_ray, float y_ray, t_game *game)
 	return (dist_fixed);
 }
 
-void	draw_column(t_game *game, int x, t_raycast *raycast)
-{
-	int	y;
 
+
+
+void	draw_column(t_game *game, int x, t_raycast *ray)
+{
+	int		y;
+	int		wall_color;
+
+	wall_color = game->west_cost; // valeur par defaut
+	if (ray->wall_orientation == NORTH)
+		wall_color = game->north_cost;
+	else if (ray->wall_orientation == SOUTH)
+		wall_color = game->south_cost;
+	else if (ray->wall_orientation == EAST)
+		wall_color = game->east_cost;
+	else if (ray->wall_orientation == WEST)
+		wall_color = game->west_cost;
 	y = 0;
-	while (y < raycast->beg_y)
+	while (y < ray->beg_y)
 	{
 		put_pixel(x, y, game->ceiling, game);
 		y++;
 	}
-	while (y < raycast->end)
+	while (y < ray->end)
 	{
-		put_pixel(x, y, 255, game);
+		put_pixel(x, y, wall_color, game);
 		y++;
 	}
-	while(y < MAX_HEIGHT)
+	while (y < MAX_HEIGHT)
 	{
 		put_pixel(x, y, game->floor, game);
 		y++;
@@ -420,9 +486,11 @@ void	draw_line(t_player *player, t_game *game, float beg_x, int i)
 		raycast->y_ray += raycast->angle_sin;
 	}
 	raycast->dist = distance_fixed(raycast->x_ray, raycast->y_ray, game);
-	raycast->height = (BLOCK / raycast->dist) * (MAX_WIDTH / 2);
+	raycast->height = (BITS_SIZE / raycast->dist) * (MAX_WIDTH / 2);
 	raycast->beg_y = (MAX_HEIGHT - raycast->height) / 2;
 	raycast->end = raycast->beg_y + raycast->height;
+	
+	// get_wall_orientation(raycast);
 	draw_column(game, i, raycast);
 }
 
@@ -437,6 +505,7 @@ int	draw_loop(t_game *game)
 	fraction = PI / 3 / MAX_WIDTH;
 	x_start = player->angle - PI / 6;
 	player_mouvement(player);
+
 	i = 0;
 	while (i < MAX_WIDTH)
 	{
@@ -449,6 +518,31 @@ int	draw_loop(t_game *game)
 	return (0);
 }
 
+
+// int	draw_loop(t_game *game)
+// {
+// 	t_player	*player;
+// 	// float		fraction;
+// 	// float		x_start;
+// 	// int			i;
+
+// 	player = &game->player;
+// 	// fraction = PI / 3 / MAX_WIDTH;
+// 	// x_start = player->angle - PI / 6;
+// 	player_mouvement(player);
+
+// 	// i = 0;
+// 	// while (i < MAX_WIDTH)
+// 	// {
+// 	// 	draw_line(player, game, x_start, i);
+// 	// 	x_start += fraction;
+// 	// 	i++;
+// 	// }
+// 	minimap(game); // BONUS
+// 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+// 	return (0);
+// }
+
 int	main(int ac, char **av)
 {
 	t_game		game;
@@ -457,6 +551,7 @@ int	main(int ac, char **av)
 	game_initiation(&game, av);
 	mlx_hook(game.win, 2, 1L << 0, (void *)pressed_key, &game);
 	mlx_hook(game.win, 3, 1L << 1, (void *)released_key, &game.player);
+	mlx_hook(game.win, 6, 1L << 6, (void *)mouse_mvmt, &game);
 	mlx_hook((&game)->win, CLOSE_MOUSE, 0, (void *)close_wind, &game);
 	mlx_loop_hook(game.mlx, (void *)draw_loop, &game);
 	mlx_loop(game.mlx);
