@@ -2,6 +2,14 @@
 SRCS = \
 		Src/main.c\
 		Src/scene.c\
+		Src/game_initiation.c\
+		Src/make_it_clean.c\
+		Src/keyboard_input.c\
+		Src/player_mouvement.c\
+		Src/dda.c\
+		Src/dda2.c\
+		Src/dda3.c\
+		Src/texture_drawing.c\
 		Src/minimap.c
 
 OBJS = ${SRCS:.c=.o}

@@ -17,7 +17,7 @@ static void	remove_newline(char **tab)
 	{
 		len = ft_strlen(tab[i]);
 		while (len > 0 && (tab[i][len - 1] == '\n'
-				|| tab[i][len - 1] == '\r'))
+			|| tab[i][len - 1] == '\r'))
 		{
 			tab[i][len - 1] = '\0';
 			len--;
@@ -44,7 +44,7 @@ static int	size_fd(int fd)
 	return (i);
 }
 
-static char	**read_scene(char *filename)
+static char	**read_data(char *filename)
 {
 	int		fd;
 	int		line_count;
@@ -337,7 +337,7 @@ int	extract_scene(char **av, t_game *game)
 
 	if (!has_cub_extension(av[1]))
 		return (scene_error("Scene file must end with .cub"));
-	lines = read_scene(av[1]);
+	lines = read_data(av[1]);
 	if (!lines)
 		return (scene_error("Cannot open scene file"));
 	i = 0;

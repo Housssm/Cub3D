@@ -127,7 +127,20 @@ typedef struct s_game
 	t_raycast	raycast;
 }	t_game;
 
-int		charge_all_textures(t_game *game);
+int		game_initiation(t_game *game, char **av);
+int		close_wind(t_game *game);
+void	game_cleaning(t_game *game);
+int		mouse_mvmt(int x, int y, t_game *game);
+void	released_key(int keycode, t_player *player);
+void	pressed_key(int keycode, t_game *game);
+int		draw_loop(t_game *game);
+void	player_mouvement(t_player *player);
+void	ray_initiation(t_player *player, t_raycast *raycast, int col);
+int		dda_application(t_game *game, t_raycast *raycast);
+void	draw_empty_column(t_game *game, int x);
+void	draw_column(t_game *game, int x, t_raycast *raycast);
+void	draw_texture(t_game *game, t_raycast *raycast,
+			t_texture *texture, int x);
 void	minimap(t_game *game);
 void	put_pixel(int x, int y, int color, t_game *game);
 int		extract_scene(char **av, t_game *game);
