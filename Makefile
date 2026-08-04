@@ -1,111 +1,86 @@
-# SRCS = \
-# 		main.c\
-		
-# OBJS = ${SRCS:.c=.o}
+# **************************************************************************** #
+#                                   cub3D                                      #
+# **************************************************************************** #
 
-# NAME = cub3D
+NAME		= cub3d
 
-# HEADER = cub3d.h
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror
 
-# LIBFT_DIR = ./Libft/libft
-# LIBFT = ${LIBFT_DIR}/libft.a
+# ----------------------------- Libraries ----------------------------------- #
 
-# MLX_DIR = ./minilibx-linux
-# MLX = ${MLX_DIR}/libmlx.a
+LIBFT_DIR	= Libft/libft
+LIBFT		= $(LIBFT_DIR)/libft.a
 
-# CC = cc
-# CFLAGS = -Wall -Werror -Wextra -g3
-# MLX_FLAGS = -L${MLX_DIR} -lmlx -lXext -lX11 -lm
+GNL_DIR		= Libft/GNL
+GNL			= $(GNL_DIR)/get_next_line.a
 
-# all: ${NAME}
+PRINTF_DIR	= Libft/printf
+PRINTF		= $(PRINTF_DIR)/libftprintf.a
 
-# ${NAME}: ${OBJS} ${LIBFT} ${MLX} 
-# 	@${CC} ${CFLAGS} ${OBJS} ${LIBFT} ${MLX_FLAGS} -o ${NAME}
+MLX_DIR		= minilibx-linux
+MLX			= $(MLX_DIR)/libmlx.a
+MLX_FLAGS	= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
-# ${LIBFT}:
-# 	@make -sC ${LIBFT_DIR}
+# ----------------------------- Sources ------------------------------------- #
 
-# ${MLX}:
-# 	@make -sC ${MLX_DIR}
+SRCS		=	Src/main.c \
+				Src/parsing/init.c \
+				Src/parsing/check_args.c \
+				Src/parsing/parsing_utils.c \
+				Src/parsing/check_map.c \
+				Src/parsing/map_closed.c \
+				Src/parsing/flood_fill.c \
+				Src/parsing/check_texture.c \
+				Src/parsing/check_color.c \
+				Src/parsing/check_color_utils.c \
+				Src/parsing/extract_lines.c \
+				Src/parsing/build_map.c \
+				Src/parsing/parse_config.c \
+				Src/parsing/parsing.c
 
-# %.o: %.c ${HEADER}
-# 	@${CC} ${CFLAGS} -I${LIBFT_DIR} -I${MLX_DIR} -c $< -o $@
+OBJS		= $(SRCS:.c=.o)
 
-# clean:
-# 	rm -f ${OBJS}
-# 	@make -sC ${LIBFT_DIR} clean
-# 	@make -sC ${MLX_DIR} clean
+INCLUDES	=	-I Includes \
+				-I $(LIBFT_DIR) \
+				-I $(GNL_DIR) \
+				-I $(PRINTF_DIR) \
+				-I $(MLX_DIR)
 
-# fclean: clean
-# 	rm -f ${NAME}
-# 	rm -f a.out
-# 	@make -sC ${LIBFT_DIR} fclean
-# 	@make -sC ${MLX_DIR} clean
+# ----------------------------- Rules --------------------------------------- #
 
-# re: fclean all
+all: $(NAME)
 
-# .PHONY: all clean fclean re
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
 
+$(GNL):
+	$(MAKE) -C $(GNL_DIR)
 
+$(PRINTF):
+	$(MAKE) -C $(PRINTF_DIR)
 
+$(MLX):
+	$(MAKE) -C $(MLX_DIR)
 
-SRCS = main.c
+$(NAME): $(LIBFT) $(GNL) $(PRINTF) $(MLX) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(PRINTF) $(GNL) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
-OBJS = ${SRCS:.c=.o}
-
-NAME = cub3D
-
-HEADER = cub3d.h
-
-LIBFT_DIR = ./Libft/libft
-LIBFT = ${LIBFT_DIR}/libft.a
-
-PRINTF_DIR = ./Libft/printf
-PRINTF = ${PRINTF_DIR}/libftprintf.a
-
-GNL_DIR = ./Libft/GNL
-GNL = ${GNL_DIR}/get_next_line.a
-
-MLX_DIR = ./minilibx-linux
-MLX = ${MLX_DIR}/libmlx.a
-
-CC = cc
-CFLAGS = -Wall -Werror -Wextra -g3
-MLX_FLAGS = -L${MLX_DIR} -lmlx -lXext -lX11 -lm
-
-all: ${NAME}
-
-${NAME}: ${OBJS} ${LIBFT} ${PRINTF} ${GNL} ${MLX}
-	@${CC} ${CFLAGS} ${OBJS} ${LIBFT} ${PRINTF} ${GNL} ${MLX_FLAGS} -o ${NAME}
-
-${LIBFT}:
-	@make -sC ${LIBFT_DIR}
-
-${PRINTF}:
-	@make -sC ${PRINTF_DIR}
-
-${GNL}:
-	@make -sC ${GNL_DIR}
-
-${MLX}:
-	@make -sC ${MLX_DIR}
-
-%.o: %.c ${HEADER}
-	@${CC} ${CFLAGS} -I${LIBFT_DIR} -I${MLX_DIR} -c $< -o $@
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -f ${OBJS}
-	@make -sC ${LIBFT_DIR} clean
-	@make -sC ${PRINTF_DIR} clean
-	@make -sC ${GNL_DIR} clean
-	@make -sC ${MLX_DIR} clean
+	rm -f $(OBJS)
+	$(MAKE) -C $(LIBFT_DIR) clean
+	$(MAKE) -C $(GNL_DIR) clean
+	$(MAKE) -C $(PRINTF_DIR) clean
+	$(MAKE) -C $(MLX_DIR) clean
 
 fclean: clean
-	rm -f ${NAME}
-	@make -sC ${LIBFT_DIR} fclean
-	@make -sC ${PRINTF_DIR} fclean
-	@make -sC ${GNL_DIR} fclean
-	@make -sC ${MLX_DIR} clean
+	rm -f $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
+	$(MAKE) -C $(GNL_DIR) fclean
+	$(MAKE) -C $(PRINTF_DIR) fclean
 
 re: fclean all
 
