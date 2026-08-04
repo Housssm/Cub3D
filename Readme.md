@@ -30,4 +30,3 @@ Ray Casting Tutorial - YouTube - [Comprehensive video explanation of raycasting 
 Ray Casting in C - Medium Article - [Detailed technical article with code examples](https://ismailassil.medium.com/ray-casting-c-8bfae2c2fc13)
 
 -Peer-learning and collaboration with fellow students
- 
