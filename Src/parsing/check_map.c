@@ -12,6 +12,18 @@
 
 #include "../../Includes/cub3d.h"
 
+void	init_direction(t_data *data, char c)//fonction rajoutee
+{
+	if (c == 'N')
+		data->player_orientation = NORTH;
+	if (c == 'S')
+		data->player_orientation = SOUTH;
+	if (c == 'E')
+		data->player_orientation = EAST;
+	if (c == 'W')
+		data->player_orientation = WEST;
+}
+
 int	find_player(t_data *data, int y, int x)
 {
 	char	c;
@@ -24,6 +36,8 @@ int	find_player(t_data *data, int y, int x)
 			return (0);
 		data->player_x = x;
 		data->player_y = y;
+		init_direction(data, c);
+		data->map[y][x] = '0';
 	}
 	return (1);
 }

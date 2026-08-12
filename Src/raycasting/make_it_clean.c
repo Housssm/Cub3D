@@ -20,17 +20,21 @@ static void	destroy_all_textures(t_game *game)
 
 static void	free_path_texture(t_game *game)
 {
-	free(game->texture_east.path);
-	free(game->texture_west.path);
-	free(game->texture_north.path);
-	free(game->texture_south.path);
+	if (game->texture_east.path)
+		free(game->texture_east.path);
+	if (game->texture_west.path)
+		free(game->texture_west.path);
+	if (game->texture_north.path)
+		free(game->texture_north.path);
+	if (game->texture_south.path)
+		free(game->texture_south.path);
 	game->texture_east.path = NULL;
 	game->texture_west.path = NULL;
 	game->texture_north.path = NULL;
 	game->texture_south.path = NULL;
 }
 
-void	game_cleaning(t_game *game, t_data *data)
+void	game_cleaning(t_game *game)
 {
 	if (!game)
 		return ;
@@ -51,7 +55,6 @@ void	game_cleaning(t_game *game, t_data *data)
 	game->win = NULL;
 	game->mlx = NULL;
 	game->map = NULL;
-	free_data(data);
 }
 
 int	close_wind(t_game *game)

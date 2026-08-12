@@ -50,10 +50,10 @@ static int	fill_data(t_game *game, t_data *data)
 	game->player.game = game;
 	if (extract_scene(game, data))
 		return (1);
-	if (!game->map)
-		return (1);
+	// if (!game->map)
+	// 	return (1);
 	player_initialisation(&game->player);
-	game->ceiling = 0x87CEEB;
+	// game->ceiling = 0x87CEEB;
 	game->minimap.offset_x = 10;
 	game->minimap.offset_y = 10;
 	game->minimap.block_size = 10;
@@ -63,9 +63,9 @@ static int	fill_data(t_game *game, t_data *data)
 	return (0);
 }
 
-int	game_initiation(t_game *game, t_data *data, char *av)
+int	game_initiation(t_game *game, t_data *data, char **av)
 {
-	if (!parse_scene(&data, av[1]))
+	if (!parse_scene(data, av[1]))
 		return (1);
 	if (fill_data(game, data))
 		return (1);

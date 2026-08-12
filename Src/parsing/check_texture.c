@@ -41,7 +41,7 @@ int	is_texture_id(char *path, int index)
 	return (0);
 }
 
-static int	assign_texture(t_texture *tex, int which, char *path)
+static int	assign_texture(t_textr *tex, int which, char *path)
 {
 	char	*value;
 
@@ -64,7 +64,7 @@ static int	assign_texture(t_texture *tex, int which, char *path)
 	return (1);
 }
 
-int	texture_path(t_texture *tex, char *path)
+int	texture_path(t_textr *tex, char *path)
 {
 	int	which;
 
@@ -74,7 +74,7 @@ int	texture_path(t_texture *tex, char *path)
 	return (assign_texture(tex, which, path));
 }
 
-int	valide_texture(t_texture *tex)
+int	valide_texture(t_textr *tex)
 {
 	if (!tex->no || !tex->so || !tex->ea || !tex->we)
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 11:57:16 by mtodzzi           #+#    #+#             */
-/*   Updated: 2026/08/12 13:33:44 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/08/12 14:26:57 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,17 @@
 # define SIDE_X 0
 # define SIDE_Y 1
 
-typedef struct s_texture
+typedef struct s_textr
 {
 	char	*no;
 	char	*so;
 	char	*we;
 	char	*ea;
+}	t_textr;
+
+
+typedef struct s_texture
+{
 	char	*path;
 	void	*img;
 	char	*data;
@@ -78,7 +83,8 @@ typedef struct s_data
 	int			player_x;
 	int			player_y;
 	int			player_count;
-	t_texture	tex;
+	int			player_orientation;// rajoutee
+	t_textr		tex;
 	int			floor_rgb[3];
 	int			ceiling_rgb[3];
 	int			floor_set;
@@ -146,8 +152,8 @@ typedef struct s_game
 	int			map_width;
 	int			ceiling;
 	int			floor;
-	int			ceiling_is_set;
-	int			floor_is_set;
+	// int			ceiling_is_set;
+	// int			floor_is_set;
 	int			east_coast_text;
 	int			west_coast_text;
 	int			north_coast_text;
@@ -181,8 +187,8 @@ int		is_empty_line(char *line);
 /* check_texture.c */
 char	*get_texture_path(char *path);
 int		is_texture_id(char *path, int index);
-int		texture_path(t_texture *tex, char *path);
-int		valide_texture(t_texture *tex);
+int		texture_path(t_textr *tex, char *path);
+int		valide_texture(t_textr *tex);
 
 /* check_color.c */
 int		is_valid_rgb(int *rgb);
@@ -226,9 +232,9 @@ int		parse_scene(t_data *data, char *file);
 void	free_data(t_data *data);
 
 /* raycasting*/
-int		game_initiation(t_game *game, t_data *data, char *av);
+int		game_initiation(t_game *game, t_data *data, char **av);
 int		close_wind(t_game *game);
-void	game_cleaning(t_game *game, t_data *data);
+void	game_cleaning(t_game *game);
 int		mouse_mvmt(int x, int y, t_game *game);
 void	released_key(int keycode, t_player *player);
 void	pressed_key(int keycode, t_game *game);
@@ -242,7 +248,7 @@ void	draw_texture(t_game *game, t_raycast *raycast,
 			t_texture *texture, int x);
 void	minimap(t_game *game);
 void	put_pixel(int x, int y, int color, t_game *game);
-int		extract_scene(char **av, t_game *game);
+int		extract_scene(t_game *game, t_data *data);
 
 
 #endif
