@@ -1,4 +1,4 @@
-#include "../Include/cub3d.h"
+#include "../Includes/cub3d.h"
 
 static void	destroy_texture(t_game *game, t_texture *texture)
 {
@@ -30,7 +30,7 @@ static void	free_path_texture(t_game *game)
 	game->texture_south.path = NULL;
 }
 
-void	game_cleaning(t_game *game)
+void	game_cleaning(t_game *game, t_data *data)
 {
 	if (!game)
 		return ;
@@ -51,6 +51,7 @@ void	game_cleaning(t_game *game)
 	game->win = NULL;
 	game->mlx = NULL;
 	game->map = NULL;
+	free_data(data);
 }
 
 int	close_wind(t_game *game)

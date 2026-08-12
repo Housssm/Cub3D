@@ -1,4 +1,4 @@
-#include "../Include/cub3d.h"
+#include "../Includes/cub3d.h"
 
 int	mouse_mvmt(int x, int y, t_game *game)
 {

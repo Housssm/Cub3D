@@ -1,4 +1,4 @@
-#include "../Include/cub3d.h"
+#include "../Includes/cub3d.h"
 
 void	set_text_x(t_game *game, t_raycast *raycast, t_texture *texture)
 {

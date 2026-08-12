@@ -1,4 +1,4 @@
-#include "../Include/cub3d.h"
+#include "../Includes/cub3d.h"
 
 int	texture_pixel(t_texture *texture, int x, int y)
 {

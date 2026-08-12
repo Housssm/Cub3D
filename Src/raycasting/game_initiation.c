@@ -1,4 +1,4 @@
-#include "../Include/cub3d.h"
+#include "../Includes/cub3d.h"
 
 static int	charge_texture(t_game *game, t_texture *texture)
 {
@@ -45,10 +45,10 @@ static void	player_initialisation(t_player *player)
 	player->right_rotation = false;
 }
 
-static int	fill_data(t_game *game, char **av)
+static int	fill_data(t_game *game, t_data *data)
 {
 	game->player.game = game;
-	if (extract_scene(av, game))
+	if (extract_scene(game, data))
 		return (1);
 	if (!game->map)
 		return (1);
@@ -63,9 +63,11 @@ static int	fill_data(t_game *game, char **av)
 	return (0);
 }
 
-int	game_initiation(t_game *game, char **av)
+int	game_initiation(t_game *game, t_data *data, char *av)
 {
-	if (fill_data(game, av))
+	if (!parse_scene(&data, av[1]))
+		return (1);
+	if (fill_data(game, data))
 		return (1);
 	game->mlx = mlx_init();
 	if (!game->mlx)

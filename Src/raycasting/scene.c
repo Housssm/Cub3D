@@ -1,4 +1,4 @@
-#include "../Include/cub3d.h"
+#include "../Includes/cub3d.h"
 
 static int	scene_error(char *message)
 {
@@ -363,5 +363,19 @@ int	extract_scene(char **av, t_game *game)
 	free_split(lines);
 	if (find_pos(game) || validate_closed_map(game))
 		return (1);
+	return (0);
+}
+
+int	extract_scene(t_game *game, t_data *data)
+{
+	data->map;
+	data->map_height;
+	data->map_width;
+	data->player_x;
+	data->player_y;
+	data->tex;
+	data->floor_rgb;
+	data->ceiling_rgb;
+	
 	return (0);
 }

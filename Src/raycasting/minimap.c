@@ -1,4 +1,4 @@
-#include "../Include/cub3d.h"
+#include "../Includes/cub3d.h"
 
 void	draw_block(t_game *game, int xy[2], int size, int color)
 {

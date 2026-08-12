@@ -12,7 +12,7 @@
 
 #include "../../Includes/cub3d.h"
 
-void	init_data(t_data *data)
+void	init_data(t_data *data, t_game *game)
 {
 	data->map = NULL;
 	data->map_height = 0;
@@ -32,4 +32,5 @@ void	init_data(t_data *data)
 	data->ceiling_rgb[2] = -1;
 	data->floor_set = 0;
 	data->ceiling_set = 0;
+	ft_bzero(game, sizeof(game));
 }

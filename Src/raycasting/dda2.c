@@ -1,4 +1,4 @@
-#include "../Include/cub3d.h"
+#include "../Includes/cub3d.h"
 
 void	draw_empty_column(t_game *game, int x)
 {
