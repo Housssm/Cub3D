@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 11:57:16 by mtodzzi           #+#    #+#             */
-/*   Updated: 2026/08/12 14:26:57 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:36:57 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ typedef struct s_textr
 	char	*ea;
 }	t_textr;
 
-
 typedef struct s_texture
 {
 	char	*path;
@@ -73,7 +72,6 @@ typedef struct s_texture
 	int		width;
 	int		height;
 }	t_texture;
-
 
 typedef struct s_data
 {
@@ -249,6 +247,5 @@ void	draw_texture(t_game *game, t_raycast *raycast,
 void	minimap(t_game *game);
 void	put_pixel(int x, int y, int color, t_game *game);
 int		extract_scene(t_game *game, t_data *data);
-
 
 #endif

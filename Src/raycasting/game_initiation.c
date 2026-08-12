@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game_initiation.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/12 15:38:09 by hoel-har          #+#    #+#             */
+/*   Updated: 2026/08/12 15:45:44 by hoel-har         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../Includes/cub3d.h"
 
 static int	charge_texture(t_game *game, t_texture *texture)
@@ -36,7 +48,6 @@ static int	charge_all_textures(t_game *game)
 
 static void	player_initialisation(t_player *player)
 {
-	player->angle = PI / 2;
 	player->key_up = false;
 	player->key_down = false;
 	player->key_right = false;
@@ -50,10 +61,7 @@ static int	fill_data(t_game *game, t_data *data)
 	game->player.game = game;
 	if (extract_scene(game, data))
 		return (1);
-	// if (!game->map)
-	// 	return (1);
 	player_initialisation(&game->player);
-	// game->ceiling = 0x87CEEB;
 	game->minimap.offset_x = 10;
 	game->minimap.offset_y = 10;
 	game->minimap.block_size = 10;
@@ -66,7 +74,7 @@ static int	fill_data(t_game *game, t_data *data)
 int	game_initiation(t_game *game, t_data *data, char **av)
 {
 	if (!parse_scene(data, av[1]))
-		return (1);
+		return (free_data(data), 1);
 	if (fill_data(game, data))
 		return (1);
 	game->mlx = mlx_init();

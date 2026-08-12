@@ -27,22 +27,6 @@ static int	check_arguments(int ac, char **av)
 	return (1);
 }
 
-// int	main(int ac, char **av)
-// {
-// 	t_data	data;
-
-// 	// if (!check_arguments(ac, av))
-// 	// 	return (1);
-// 	init_data(&data);
-// 	if (!parse_scene(&data, av[1]))
-// 		return (1);
-// 	// printf("Parsing OK\n");
-// 	// printf("Map %dx%d, player at (%d,%d)\n", data.map_width,
-// 	// 	data.map_height, data.player_x, data.player_y);
-// 	free_data(&data);
-// 	return (0);
-// }
-
 int	main(int ac, char **av)
 {
 	t_data		data;
