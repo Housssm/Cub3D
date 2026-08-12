@@ -37,7 +37,16 @@ SRCS		=	Src/main.c \
 				Src/parsing/extract_lines.c \
 				Src/parsing/build_map.c \
 				Src/parsing/parse_config.c \
-				Src/parsing/parsing.c
+				Src/parsing/parsing.c \
+				Src/game_initiation.c\
+				Src/make_it_clean.c\
+				Src/keyboard_input.c\
+				Src/player_mouvement.c\
+				Src/dda.c\
+				Src/dda2.c\
+				Src/dda3.c\
+				Src/texture_drawing.c\
+				Src/minimap.c
 
 OBJS		= $(SRCS:.c=.o)
 
