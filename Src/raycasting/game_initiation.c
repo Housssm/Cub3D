@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 15:38:09 by hoel-har          #+#    #+#             */
-/*   Updated: 2026/08/12 15:45:44 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:57:44 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,8 @@ static int	fill_data(t_game *game, t_data *data)
 	return (0);
 }
 
-int	game_initiation(t_game *game, t_data *data, char **av)
+int	game_initiation(t_game *game, t_data *data)
 {
-	if (!parse_scene(data, av[1]))
-		return (free_data(data), 1);
 	if (fill_data(game, data))
 		return (1);
 	game->mlx = mlx_init();

@@ -35,6 +35,8 @@ int	main(int ac, char **av)
 	if (!check_arguments(ac, av))
 		return (1);
 	init_data(&data, &game);
+	if (!parse_scene(&data, av[1]))
+		return (1);
 	if (game_initiation(&game, &data, av))
 		return (game_cleaning(&game), 1);
 	mlx_hook(game.win, 2, 1L << 0, (void *)pressed_key, &game);

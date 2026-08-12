@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 15:37:57 by hoel-har          #+#    #+#             */
-/*   Updated: 2026/08/12 15:39:14 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:49:34 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,10 @@ int	extract_scene(t_game *game, t_data *data)
 	game->texture_east.path = data->tex.ea;
 	game->floor = parse_color(data->floor_rgb);
 	game->ceiling = parse_color(data->ceiling_rgb);
+	data->map = NULL;
+	data->tex.no = NULL;
+	data->tex.so = NULL;
+	data->tex.we = NULL;
+	data->tex.ea = NULL;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 11:57:16 by mtodzzi           #+#    #+#             */
-/*   Updated: 2026/08/12 15:36:57 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:57:27 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,7 @@ int		parse_scene(t_data *data, char *file);
 void	free_data(t_data *data);
 
 /* raycasting*/
-int		game_initiation(t_game *game, t_data *data, char **av);
+int		game_initiation(t_game *game, t_data *data);
 int		close_wind(t_game *game);
 void	game_cleaning(t_game *game);
 int		mouse_mvmt(int x, int y, t_game *game);
