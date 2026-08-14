@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 11:57:16 by mtodzzi           #+#    #+#             */
-/*   Updated: 2026/08/12 15:57:27 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/08/14 11:57:47 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_data
 	int			player_x;
 	int			player_y;
 	int			player_count;
-	int			player_orientation;// rajoutee
+	float		player_orientation;// rajoutee
 	t_textr		tex;
 	int			floor_rgb[3];
 	int			ceiling_rgb[3];
@@ -150,8 +150,6 @@ typedef struct s_game
 	int			map_width;
 	int			ceiling;
 	int			floor;
-	// int			ceiling_is_set;
-	// int			floor_is_set;
 	int			east_coast_text;
 	int			west_coast_text;
 	int			north_coast_text;

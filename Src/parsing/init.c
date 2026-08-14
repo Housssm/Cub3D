@@ -20,7 +20,7 @@ void	init_data(t_data *data, t_game *game)
 	data->player_x = -1;
 	data->player_y = -1;
 	data->player_count = 0;
-	data->player_orientation = 0;// rajoutee
+	data->player_orientation = 0;
 	data->tex.no = NULL;
 	data->tex.so = NULL;
 	data->tex.we = NULL;
