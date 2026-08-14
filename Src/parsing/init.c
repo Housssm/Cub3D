@@ -33,5 +33,9 @@ void	init_data(t_data *data, t_game *game)
 	data->ceiling_rgb[2] = -1;
 	data->floor_set = 0;
 	data->ceiling_set = 0;
-	ft_bzero(game, sizeof(game));
+	ft_bzero(game, sizeof(t_game));
+	ft_bzero(&game->texture_east, sizeof(t_texture));
+	ft_bzero(&game->texture_west, sizeof(t_texture));
+	ft_bzero(&game->texture_north, sizeof(t_texture));
+	ft_bzero(&game->texture_south, sizeof(t_texture));
 }

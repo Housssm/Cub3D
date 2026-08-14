@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 15:38:09 by hoel-har          #+#    #+#             */
-/*   Updated: 2026/08/12 15:57:44 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/08/14 11:33:14 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static int	charge_texture(t_game *game, t_texture *texture)
 	{
 		ft_putstr_fd("Error\nUnable to load the texture: ", 2);
 		ft_putendl_fd(texture->path, 2);
+		texture->img = NULL;
 		return (1);
 	}
 	texture->data = mlx_get_data_addr(texture->img, &texture->bpp,

@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 15:38:05 by hoel-har          #+#    #+#             */
-/*   Updated: 2026/08/12 15:58:08 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/08/14 11:37:27 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	destroy_texture(t_game *game, t_texture *texture)
 {
-	if (game->mlx && texture->img)
+	if (game && game->mlx && texture && texture->img)
 	{
 		mlx_destroy_image(game->mlx, texture->img);
 		texture->img = NULL;
