@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 15:38:10 by hoel-har          #+#    #+#             */
-/*   Updated: 2026/08/12 15:38:11 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/09/09 16:47:47 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	set_text_x(t_game *game, t_raycast *raycast, t_texture *texture)
 		raycast->wall_x = player_x + raycast->distance * raycast->angle_cos;
 	raycast->wall_x -= floor(raycast->wall_x);
 	raycast->texture_x = (int)(raycast->wall_x * texture->width);
-	if ((raycast->side == SIDE_X && raycast->angle_cos > 0)
-		|| (raycast->side == SIDE_Y && raycast->angle_sin < 0))
+	if ((raycast->side == SIDE_X && raycast->angle_cos < 0)
+		|| (raycast->side == SIDE_Y && raycast->angle_sin > 0))
 		raycast->texture_x = texture->width - raycast->texture_x - 1;
 }
 
