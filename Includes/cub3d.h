@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 11:57:16 by mtodzzi           #+#    #+#             */
-/*   Updated: 2026/08/14 11:57:47 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/09/09 18:50:43 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,5 +248,6 @@ void	draw_texture(t_game *game, t_raycast *raycast,
 void	minimap(t_game *game);
 void	put_pixel(int x, int y, int color, t_game *game);
 int		extract_scene(t_game *game, t_data *data);
+int		draw_loop_bonus(t_game *game);
 
 #endif

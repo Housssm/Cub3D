@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   texture_drawing.c                                  :+:      :+:    :+:   */
+/*   texture_drawing_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 15:37:49 by hoel-har          #+#    #+#             */
-/*   Updated: 2026/09/09 19:06:05 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/09/09 18:57:09 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	draw_line(t_player *player, t_game *game, int x)
 		draw_column(game, x, raycast);
 }
 
-int	draw_loop(t_game *game)
+int	draw_loop_bonus(t_game *game)
 {
 	int			i;
 
@@ -74,6 +74,7 @@ int	draw_loop(t_game *game)
 		draw_line(&game->player, game, i);
 		i++;
 	}
+	minimap(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);
 }
