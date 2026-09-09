@@ -21,7 +21,8 @@ static int	check_arguments(int ac, char **av)
 	}
 	if (!is_cub_file(av[1]))
 	{
-		write(2, "Error\nFile must have a .cub extension\n", 39);
+		write(2, "Error\nFile must have a .cub extension\n",
+			ft_strlen("Error\nFile must have a .cub extension\n"));
 		return (0);
 	}
 	return (1);

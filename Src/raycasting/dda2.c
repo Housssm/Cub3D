@@ -54,8 +54,9 @@ static int	perform_dda_loop(t_game *game, t_raycast *raycast)
 		}
 		if (outside_map(game, raycast->map_x, raycast->map_y))
 			return (1);
-		if (game->map[raycast->map_y][raycast->map_x] == '1'
-			|| game->map[raycast->map_y][raycast->map_x] == ' ')
+		if (game->map[raycast->map_y][raycast->map_x] == ' ')
+			return (1);
+		if (game->map[raycast->map_y][raycast->map_x] == '1')
 			return (0);
 	}
 }

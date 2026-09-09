@@ -14,15 +14,18 @@
 
 int	is_wall(t_game *game, float x, float y)
 {
-	int	map_x;
-	int	map_y;
+	int		map_x;
+	int		map_y;
+	char	c;
 
 	map_x = (int)(x / BITS_SIZE);
 	map_y = (int)(y / BITS_SIZE);
-	if (map_x < 0 || map_x >= game->map_width || map_y < 0
-		|| map_y >= game->map_height)
+	if (map_x < 0 || map_y < 0 || map_y >= game->map_height)
 		return (1);
-	return (game->map[map_y][map_x] == '1');
+	if (map_x >= (int)ft_strlen(game->map[map_y]))
+		return (1);
+	c = game->map[map_y][map_x];
+	return (c == '1' || c == ' ');
 }
 
 void	player_rotation(t_player *player, float speed_angle)

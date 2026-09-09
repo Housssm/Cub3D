@@ -68,12 +68,19 @@ char	**read_all_lines(char *file)
 	if (!lines)
 		return (NULL);
 	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (free(lines), NULL);
 	i = 0;
 	while (i < total)
 	{
 		lines[i] = get_next_line(fd);
 		if (!lines[i])
-			break ;
+		{
+			lines[i] = NULL;
+			close(fd);
+			free_line(lines);
+			return (NULL);
+		}
 		strip_newline(lines[i]);
 		i++;
 	}

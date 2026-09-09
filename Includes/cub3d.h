@@ -19,7 +19,6 @@
 # include "mlx.h"
 # include <unistd.h>
 # include <fcntl.h>
-# include <stdio.h>
 # include <string.h>
 # include <sys/time.h>
 # include <math.h>
@@ -50,8 +49,12 @@
 # define WEST PI
 # define SIDE_X 0
 # define SIDE_Y 1
-# define SIDE_X 0
-# define SIDE_Y 1
+
+typedef struct s_point
+{
+	int	y;
+	int	x;
+}	t_point;
 
 typedef struct s_textr
 {

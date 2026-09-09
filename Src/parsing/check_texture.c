@@ -28,6 +28,8 @@ char	*get_texture_path(char *path)
 
 int	is_texture_id(char *path, int index)
 {
+	if (!path[index] || !path[index + 1])
+		return (0);
 	if (path[index + 2] && !is_white_space(path[index + 2]))
 		return (0);
 	if (path[index] == 'N' && path[index + 1] == 'O')
