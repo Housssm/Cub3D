@@ -21,7 +21,7 @@ char	*get_texture_path(char *path)
 	str = NULL;
 	while (path && path[i] && is_white_space(path[i]))
 		i++;
-	if (path[i] == '/' || path[i] == '.')
+	if (path[i])
 		str = ft_strdup(path + i);
 	return (str);
 }

@@ -42,6 +42,11 @@ int	check_tab_rgb(char **array)
 		j = 0;
 		while (array[i][j])
 		{
+			if (is_white_space(array[i][j]))
+			{
+				j++;
+				continue ;
+			}
 			if (!ft_isdigit(array[i][j]))
 				return (0);
 			j++;

@@ -19,7 +19,7 @@ char	**copy_map(char **map)
 	int		i;
 
 	total = count_map_lines(map);
-	copy = malloc(sizeof(char *) * (total + 1));
+	copy = ft_calloc(total + 1, sizeof(char *));
 	if (!copy)
 		return (NULL);
 	i = 0;
@@ -54,25 +54,16 @@ static int	push_point(t_point **stack, int *cap, int *top, int y, int x)
 	return (1);
 }
 
-static int	visit_point(char **copy, t_point pt, int *leak)
+static int	visit_cell(char **copy, t_point pt, int *leak)
 {
 	if (pt.y < 0 || pt.x < 0 || !copy[pt.y])
-	{
-		*leak = 1;
-		return (0);
-	}
+		return (*leak = 1, 0);
 	if (pt.x >= (int)ft_strlen(copy[pt.y]))
-	{
-		*leak = 1;
-		return (0);
-	}
+		return (*leak = 1, 0);
 	if (copy[pt.y][pt.x] == '1' || copy[pt.y][pt.x] == 'F')
 		return (0);
 	if (copy[pt.y][pt.x] == ' ')
-	{
-		*leak = 1;
-		return (0);
-	}
+		return (*leak = 1, 0);
 	copy[pt.y][pt.x] = 'F';
 	return (1);
 }
@@ -85,7 +76,7 @@ static int	fill_loop(char **copy, t_point **stack, int *cap, int *top,
 	while (*top > 0)
 	{
 		cur = (*stack)[--(*top)];
-		if (!visit_point(copy, cur, leak))
+		if (!visit_cell(copy, cur, leak))
 			continue ;
 		if (!push_point(stack, cap, top, cur.y + 1, cur.x)
 			|| !push_point(stack, cap, top, cur.y - 1, cur.x)

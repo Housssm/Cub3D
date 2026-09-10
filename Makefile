@@ -98,4 +98,10 @@ fclean: clean
 
 re: fclean all
 
+<<<<<<< HEAD
+=======
+bonus: CFLAGS += -DBONUS
+bonus: re
+
+>>>>>>> 27ffb64 (version du 10/09)
 .PHONY: all clean fclean re bonus

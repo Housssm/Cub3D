@@ -12,7 +12,7 @@
 
 #include "../Includes/cub3d.h"
 
-int	is_wall(t_game *game, float x, float y)
+static int	is_wall_at(t_game *game, float x, float y)
 {
 	int		map_x;
 	int		map_y;
@@ -26,6 +26,22 @@ int	is_wall(t_game *game, float x, float y)
 		return (1);
 	c = game->map[map_y][map_x];
 	return (c == '1' || c == ' ');
+}
+
+int	is_wall(t_game *game, float x, float y)
+{
+	float	m;
+
+	m = BITS_SIZE * 0.15f;
+	if (is_wall_at(game, x - m, y - m))
+		return (1);
+	if (is_wall_at(game, x + m, y - m))
+		return (1);
+	if (is_wall_at(game, x - m, y + m))
+		return (1);
+	if (is_wall_at(game, x + m, y + m))
+		return (1);
+	return (0);
 }
 
 void	player_rotation(t_player *player, float speed_angle)

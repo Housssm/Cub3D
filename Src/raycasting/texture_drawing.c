@@ -74,6 +74,12 @@ int	draw_loop(t_game *game)
 		draw_line(&game->player, game, i);
 		i++;
 	}
+<<<<<<< HEAD
+=======
+#ifdef BONUS
+	minimap(game);
+#endif
+>>>>>>> 27ffb64 (version du 10/09)
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);
 }

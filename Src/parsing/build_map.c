@@ -45,7 +45,7 @@ char	**build_map(char **lines, int start)
 
 	total = count_lines_arr(lines);
 	len = count_map_len(lines, start, total);
-	map = malloc(sizeof(char *) * (len + 1));
+	map = ft_calloc(len + 1, sizeof(char *));
 	if (!map)
 		return (NULL);
 	i = 0;

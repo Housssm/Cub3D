@@ -54,12 +54,32 @@ static int	count_file_lines(char *file)
 	return (count);
 }
 
+static char	**fill_lines(char **lines, int fd, int total)
+{
+	int	i;
+
+	i = 0;
+	while (i < total)
+	{
+		lines[i] = get_next_line(fd);
+		if (!lines[i])
+		{
+			lines[i] = NULL;
+			free_line(lines);
+			return (NULL);
+		}
+		strip_newline(lines[i]);
+		i++;
+	}
+	lines[i] = NULL;
+	return (lines);
+}
+
 char	**read_all_lines(char *file)
 {
 	char	**lines;
 	int		fd;
 	int		total;
-	int		i;
 
 	total = count_file_lines(file);
 	if (total < 0)
@@ -70,21 +90,7 @@ char	**read_all_lines(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (free(lines), NULL);
-	i = 0;
-	while (i < total)
-	{
-		lines[i] = get_next_line(fd);
-		if (!lines[i])
-		{
-			lines[i] = NULL;
-			close(fd);
-			free_line(lines);
-			return (NULL);
-		}
-		strip_newline(lines[i]);
-		i++;
-	}
-	lines[i] = NULL;
+	lines = fill_lines(lines, fd, total);
 	close(fd);
 	return (lines);
 }
