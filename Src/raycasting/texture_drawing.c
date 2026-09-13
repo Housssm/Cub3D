@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 15:37:49 by hoel-har          #+#    #+#             */
-/*   Updated: 2026/09/09 19:06:05 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/09/13 18:57:32 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,6 @@ int	draw_loop(t_game *game)
 		draw_line(&game->player, game, i);
 		i++;
 	}
-<<<<<<< HEAD
-=======
-#ifdef BONUS
-	minimap(game);
-#endif
->>>>>>> 27ffb64 (version du 10/09)
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);
 }
