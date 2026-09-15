@@ -1,4 +1,4 @@
-NAME        = cub3D
+NAME        = cub3d
 
 CC          = cc
 CFLAGS      = -Wall -Wextra -Werror
@@ -84,7 +84,7 @@ bonus: .bonus
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -f $(OBJS_MAND) $(BONUS_SPEC:.c=.o) .bonus
+	rm -f $(OBJS_MAND) $(OBJS_BONUS) .bonus
 	$(MAKE) -C $(LIBFT_DIR) clean
 	$(MAKE) -C $(GNL_DIR) clean
 	$(MAKE) -C $(PRINTF_DIR) clean
@@ -97,8 +97,5 @@ fclean: clean
 	$(MAKE) -C $(PRINTF_DIR) fclean
 
 re: fclean all
-
-bonus: CFLAGS += -DBONUS
-bonus: re
 
 .PHONY: all clean fclean re bonus
