@@ -6,7 +6,7 @@
 /*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 15:38:00 by hoel-har          #+#    #+#             */
-/*   Updated: 2026/08/12 15:38:01 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/09/15 16:11:07 by hoel-har         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,17 +82,4 @@ void	player_translation(t_player *player, t_game *game, float cos_angle,
 	if (player->key_right)
 		move_to(player, game, player->pos_x - sin_angle * speed,
 			player->pos_y + cos_angle * speed);
-}
-
-void	player_mouvement(t_player *player)
-{
-	float	speed_angle;
-	float	cos_angle;
-	float	sin_angle;
-
-	speed_angle = 0.03;
-	player_rotation(player, speed_angle);
-	cos_angle = cos(player->angle);
-	sin_angle = sin(player->angle);
-	player_translation(player, player->game, cos_angle, sin_angle);
 }

@@ -34,6 +34,7 @@ COMMON_SRCS =   Src/parsing/init.c \
                 Src/raycasting/make_it_clean.c \
                 Src/raycasting/keyboard_input.c \
                 Src/raycasting/player_mouvement.c \
+                Src/raycasting/player_mouvement_bis.c \
                 Src/raycasting/dda.c \
                 Src/raycasting/dda2.c \
                 Src/raycasting/dda3.c
