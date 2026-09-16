@@ -12,7 +12,7 @@
 
 #include "../../Includes/cub3d.h"
 
-void	init_direction(t_data *data, char c)//fonction rajoutee
+void	init_direction(t_data *data, char c)
 {
 	if (c == 'N')
 		data->player_orientation = NORTH;

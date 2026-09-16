@@ -26,6 +26,7 @@ void	free_data(t_data *data)
 	free(data->tex.so);
 	free(data->tex.we);
 	free(data->tex.ea);
+	free(data->tex.door);
 }
 
 static int	build_scene(t_data *data, char **lines)

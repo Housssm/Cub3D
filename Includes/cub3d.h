@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hoel-har <hoel-har@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mtodzzi <mtodzzi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 11:57:16 by mtodzzi           #+#    #+#             */
-/*   Updated: 2026/09/09 18:50:43 by hoel-har         ###   ########.fr       */
+/*   Updated: 2026/09/16 16:56:21 by mtodzzi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include "../minilibx-linux/mlx.h"
 
 # define USAGE "Usage: ./cub3d <file.cub>\n"
-# define CUB_CHARSET "01NSEW "
+# define CUB_CHARSET "01NSEW D"
 # define WIND_NAME "Cube"
 # define CLOSE_MOUSE 17
 # define BITS_SIZE 64
@@ -41,6 +41,8 @@
 # define DOWN 115
 # define ARR_RIGHT 65363
 # define ARR_LEFT 65361
+# define INTERACT 101
+# define DOOR_RANGE 1.5
 # define MOUSE_SENS 0.001
 # define PI 3.1415926535
 # define NORTH 4.7123889
@@ -56,12 +58,21 @@ typedef struct s_point
 	int	x;
 }	t_point;
 
+typedef struct s_stack
+{
+	t_point	*pts;
+	int		cap;
+	int		top;
+	int		leak;
+}	t_stack;
+
 typedef struct s_textr
 {
 	char	*no;
 	char	*so;
 	char	*we;
 	char	*ea;
+	char	*door;
 }	t_textr;
 
 typedef struct s_texture
@@ -84,7 +95,7 @@ typedef struct s_data
 	int			player_x;
 	int			player_y;
 	int			player_count;
-	float		player_orientation;// rajoutee
+	float		player_orientation;
 	t_textr		tex;
 	int			floor_rgb[3];
 	int			ceiling_rgb[3];
@@ -119,13 +130,10 @@ typedef struct s_raycast
 {
 	float	angle_cos;
 	float	angle_sin;
-	float	x_ray;
-	float	y_ray;
 	float	distance;
 	float	height;
 	int		beg_y;
 	int		end;
-	int		wall_orientation;
 	int		side;
 	float	wall_x;
 	int		map_x;
@@ -137,6 +145,7 @@ typedef struct s_raycast
 	float	side_dist_x;
 	float	side_dist_y;
 	int		texture_x;
+	int		is_door;
 }	t_raycast;
 
 typedef struct s_game
@@ -153,10 +162,6 @@ typedef struct s_game
 	int			map_width;
 	int			ceiling;
 	int			floor;
-	int			east_coast_text;
-	int			west_coast_text;
-	int			north_coast_text;
-	int			south_coast_text;
 	int			mouse_x;
 	int			mouse_moving;
 	int			mouse_hidden;
@@ -164,6 +169,7 @@ typedef struct s_game
 	t_texture	texture_south;
 	t_texture	texture_west;
 	t_texture	texture_east;
+	t_texture	texture_door;
 	t_player	player;
 	t_minimap	minimap;
 	t_raycast	raycast;
@@ -197,6 +203,7 @@ int		check_tab_rgb(char **array);
 int		floor_or_ceilling(t_data *data, char *line);
 
 /* check_map.c */
+void	init_direction(t_data *data, char c);
 int		find_player(t_data *data, int y, int x);
 int		is_valid_char(t_data *data, char *line, int y);
 int		is_valid_map(t_data *data, char **map);
@@ -238,6 +245,9 @@ int		mouse_mvmt(int x, int y, t_game *game);
 void	released_key(int keycode, t_player *player);
 void	pressed_key(int keycode, t_game *game);
 int		draw_loop(t_game *game);
+void	player_rotation(t_player *player, float speed_angle);
+void	player_translation(t_player *player, t_game *game, float cos_angle,
+		float sin_angle);
 void	player_mouvement(t_player *player);
 void	ray_initiation(t_player *player, t_raycast *raycast, int col);
 int		dda_application(t_game *game, t_raycast *raycast);
@@ -249,5 +259,7 @@ void	minimap(t_game *game);
 void	put_pixel(int x, int y, int color, t_game *game);
 int		extract_scene(t_game *game, t_data *data);
 int		draw_loop_bonus(t_game *game);
+void	interact_door(t_game *game);
+int		is_door_tile(t_game *game, int map_x, int map_y);
 
 #endif

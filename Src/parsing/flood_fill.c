@@ -34,77 +34,64 @@ char	**copy_map(char **map)
 	return (copy);
 }
 
-static int	push_point(t_point **stack, int *cap, int *top, int y, int x)
-{
-	t_point	*bigger;
-
-	if (*top >= *cap)
-	{
-		bigger = malloc(sizeof(t_point) * (*cap) * 2);
-		if (!bigger)
-			return (0);
-		ft_memcpy(bigger, *stack, sizeof(t_point) * (*top));
-		free(*stack);
-		*stack = bigger;
-		*cap = (*cap) * 2;
-	}
-	(*stack)[*top].y = y;
-	(*stack)[*top].x = x;
-	(*top)++;
-	return (1);
-}
-
-static int	visit_cell(char **copy, t_point pt, int *leak)
+static int	visit_cell(char **copy, t_point pt, t_stack *s)
 {
 	if (pt.y < 0 || pt.x < 0 || !copy[pt.y])
-		return (*leak = 1, 0);
+		return (s->leak = 1, 0);
 	if (pt.x >= (int)ft_strlen(copy[pt.y]))
-		return (*leak = 1, 0);
+		return (s->leak = 1, 0);
 	if (copy[pt.y][pt.x] == '1' || copy[pt.y][pt.x] == 'F')
 		return (0);
 	if (copy[pt.y][pt.x] == ' ')
-		return (*leak = 1, 0);
+		return (s->leak = 1, 0);
 	copy[pt.y][pt.x] = 'F';
 	return (1);
 }
 
-static int	fill_loop(char **copy, t_point **stack, int *cap, int *top,
-		int *leak)
+static int	push(t_stack *s, int y, int x)
 {
-	t_point	cur;
+	t_point	*bigger;
 
-	while (*top > 0)
+	if (s->top >= s->cap)
 	{
-		cur = (*stack)[--(*top)];
-		if (!visit_cell(copy, cur, leak))
-			continue ;
-		if (!push_point(stack, cap, top, cur.y + 1, cur.x)
-			|| !push_point(stack, cap, top, cur.y - 1, cur.x)
-			|| !push_point(stack, cap, top, cur.y, cur.x + 1)
-			|| !push_point(stack, cap, top, cur.y, cur.x - 1))
+		bigger = malloc(sizeof(t_point) * s->cap * 2);
+		if (!bigger)
 			return (0);
+		ft_memcpy(bigger, s->pts, sizeof(t_point) * s->top);
+		free(s->pts);
+		s->pts = bigger;
+		s->cap *= 2;
 	}
+	s->pts[s->top].y = y;
+	s->pts[s->top].x = x;
+	s->top++;
 	return (1);
 }
 
 int	flood_fill(char **copy, int y, int x)
 {
-	t_point	*stack;
-	int		cap;
-	int		top;
-	int		leak;
+	t_stack	s;
+	t_point	cur;
 
-	cap = 64;
-	stack = malloc(sizeof(t_point) * cap);
-	if (!stack)
+	s.cap = 64;
+	s.top = 0;
+	s.leak = 0;
+	s.pts = malloc(sizeof(t_point) * s.cap);
+	if (!s.pts)
 		return (0);
-	top = 0;
-	leak = 0;
-	push_point(&stack, &cap, &top, y, x);
-	if (!fill_loop(copy, &stack, &cap, &top, &leak))
-		return (free(stack), 0);
-	free(stack);
-	return (!leak);
+	if (!push(&s, y, x))
+		return (free(s.pts), 0);
+	while (s.top > 0)
+	{
+		cur = s.pts[--s.top];
+		if (!visit_cell(copy, cur, &s))
+			continue ;
+		if (!push(&s, cur.y + 1, cur.x) || !push(&s, cur.y - 1, cur.x)
+			|| !push(&s, cur.y, cur.x + 1) || !push(&s, cur.y, cur.x - 1))
+			return (free(s.pts), 0);
+	}
+	free(s.pts);
+	return (!s.leak);
 }
 
 int	right_map(t_data *data, char **map)
