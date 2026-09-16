@@ -6,7 +6,7 @@
 /*   By: mtodzzi <mtodzzi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 11:57:16 by mtodzzi           #+#    #+#             */
-/*   Updated: 2026/09/16 16:56:21 by mtodzzi          ###   ########.fr       */
+/*   Updated: 2026/09/16 20:53:15 by mtodzzi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,8 +246,7 @@ void	released_key(int keycode, t_player *player);
 void	pressed_key(int keycode, t_game *game);
 int		draw_loop(t_game *game);
 void	player_rotation(t_player *player, float speed_angle);
-void	player_translation(t_player *player, t_game *game, float cos_angle,
-		float sin_angle);
+void	player_translation(t_player *player, t_game *game, float ca, float sa);
 void	player_mouvement(t_player *player);
 void	ray_initiation(t_player *player, t_raycast *raycast, int col);
 int		dda_application(t_game *game, t_raycast *raycast);

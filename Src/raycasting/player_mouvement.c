@@ -6,7 +6,7 @@
 /*   By: mtodzzi <mtodzzi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 15:38:00 by hoel-har          #+#    #+#             */
-/*   Updated: 2026/09/16 16:44:23 by mtodzzi          ###   ########.fr       */
+/*   Updated: 2026/09/16 20:55:16 by mtodzzi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,22 +64,21 @@ void	move_to(t_player *player, t_game *game, float x, float y)
 		player->pos_y = y;
 }
 
-void	player_translation(t_player *player, t_game *game, float cos_angle,
-		float sin_angle)
+void	player_translation(t_player *player, t_game *game, float ca, float sa)
 {
 	int	speed;
 
 	speed = 2;
 	if (player->key_up)
-		move_to(player, game, player->pos_x + cos_angle * speed,
-			player->pos_y + sin_angle * speed);
+		move_to(player, game, player->pos_x + ca * speed,
+			player->pos_y + sa * speed);
 	if (player->key_down)
-		move_to(player, game, player->pos_x - cos_angle * speed,
-			player->pos_y - sin_angle * speed);
+		move_to(player, game, player->pos_x - ca * speed,
+			player->pos_y - sa * speed);
 	if (player->key_left)
-		move_to(player, game, player->pos_x + sin_angle * speed,
-			player->pos_y - cos_angle * speed);
+		move_to(player, game, player->pos_x + sa * speed,
+			player->pos_y - ca * speed);
 	if (player->key_right)
-		move_to(player, game, player->pos_x - sin_angle * speed,
-			player->pos_y + cos_angle * speed);
+		move_to(player, game, player->pos_x - sa * speed,
+			player->pos_y + ca * speed);
 }
