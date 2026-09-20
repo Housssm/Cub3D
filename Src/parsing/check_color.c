@@ -12,14 +12,22 @@
 
 #include "../../Includes/cub3d.h"
 
-int	is_valid_rgb(int *rgb)
+int	check_tab_rgb(char **array)
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (i < 3)
+	while (array[i])
 	{
-		if (rgb[i] < 0 || rgb[i] > 255)
+		j = 0;
+		while (array[i][j])
+		{
+			if (!ft_isdigit(array[i][j]))
+				return (0);
+			j++;
+		}
+		if (j == 0 || j > 3)
 			return (0);
 		i++;
 	}
