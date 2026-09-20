@@ -30,6 +30,7 @@ static void	init_data_tex(t_data *data)
 
 void	init_data(t_data *data, t_game *game)
 {
+	ft_bzero(data, sizeof(t_data));
 	data->map = NULL;
 	data->map_height = 0;
 	data->map_width = 0;

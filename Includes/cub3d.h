@@ -6,7 +6,7 @@
 /*   By: mtodzzi <mtodzzi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 11:57:16 by mtodzzi           #+#    #+#             */
-/*   Updated: 2026/09/16 20:53:15 by mtodzzi          ###   ########.fr       */
+/*   Updated: 2026/09/20 16:48:07 by mtodzzi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@
 # define DOWN 115
 # define ARR_RIGHT 65363
 # define ARR_LEFT 65361
-# define INTERACT 101
-# define DOOR_RANGE 1.5
 # define MOUSE_SENS 0.001
 # define PI 3.1415926535
 # define NORTH 4.7123889
@@ -72,7 +70,6 @@ typedef struct s_textr
 	char	*so;
 	char	*we;
 	char	*ea;
-	char	*door;
 }	t_textr;
 
 typedef struct s_texture
@@ -145,7 +142,6 @@ typedef struct s_raycast
 	float	side_dist_x;
 	float	side_dist_y;
 	int		texture_x;
-	int		is_door;
 }	t_raycast;
 
 typedef struct s_game
@@ -169,7 +165,6 @@ typedef struct s_game
 	t_texture	texture_south;
 	t_texture	texture_west;
 	t_texture	texture_east;
-	t_texture	texture_door;
 	t_player	player;
 	t_minimap	minimap;
 	t_raycast	raycast;
@@ -258,7 +253,5 @@ void	minimap(t_game *game);
 void	put_pixel(int x, int y, int color, t_game *game);
 int		extract_scene(t_game *game, t_data *data);
 int		draw_loop_bonus(t_game *game);
-void	interact_door(t_game *game);
-int		is_door_tile(t_game *game, int map_x, int map_y);
 
 #endif
