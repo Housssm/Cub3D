@@ -12,6 +12,20 @@
 
 #include "../../Includes/cub3d.h"
 
+int	is_valid_rgb(int *rgb)
+{
+	int	i;
+
+	i = 0;
+	while (i < 3)
+	{
+		if (rgb[i] < 0 || rgb[i] > 255)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	check_tab_rgb(char **array)
 {
 	int	i;
@@ -32,17 +46,6 @@ int	check_tab_rgb(char **array)
 		i++;
 	}
 	return (1);
-}
-
-int	is_color_id(char *path, int index)
-{
-	if (path[index + 1] && !is_white_space(path[index + 1]))
-		return (0);
-	if (path[index] == 'F')
-		return (1);
-	else if (path[index] == 'C')
-		return (2);
-	return (0);
 }
 
 static int	extract_rgb(t_data *data, char *line, int code)

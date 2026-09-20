@@ -31,27 +31,13 @@ char	**count_rgb(char *str)
 	return (array);
 }
 
-int	check_tab_rgb(char **array)
+int	is_color_id(char *path, int index)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (array[i])
-	{
-		j = 0;
-		while (array[i][j])
-		{
-			if (is_white_space(array[i][j]))
-			{
-				j++;
-				continue ;
-			}
-			if (!ft_isdigit(array[i][j]))
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (1);
+	if (path[index + 1] && !is_white_space(path[index + 1]))
+		return (0);
+	if (path[index] == 'F')
+		return (1);
+	else if (path[index] == 'C')
+		return (2);
+	return (0);
 }
