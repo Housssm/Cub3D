@@ -12,6 +12,20 @@
 
 #include "../../Includes/cub3d.h"
 
+static int	has_consecutive_commas(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == ',' && str[i + 1] == ',')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 char	**count_rgb(char *str)
 {
 	int		count;
@@ -19,12 +33,8 @@ char	**count_rgb(char *str)
 	char	**array;
 
 	i = 0;
-	while (str[i])
-	{
-		if (str[i] == ',' && str[i + 1] == ',')
-			return (NULL);
-		i++;
-	}
+	if (has_consecutive_commas(str))
+		return (NULL);
 	array = ft_split(str, ',');
 	if (!array)
 		return (NULL);
