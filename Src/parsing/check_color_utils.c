@@ -15,8 +15,16 @@
 char	**count_rgb(char *str)
 {
 	int		count;
+	int		i;
 	char	**array;
 
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == ',' && str[i + 1] == ',')
+			return (NULL);
+		i++;
+	}
 	array = ft_split(str, ',');
 	if (!array)
 		return (NULL);
