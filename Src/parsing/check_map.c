@@ -67,6 +67,8 @@ int	is_valid_map(t_data *data, char **map)
 	y = 0;
 	while (map[y])
 	{
+		if (is_empty_line(map[y]))
+			return (0);
 		if (!is_valid_char(data, map[y], y))
 			return (0);
 		y++;
